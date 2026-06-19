@@ -1,0 +1,5090 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Analitia CRM — Plataforma de IA Empresarial para LATAM</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Host+Grotesk:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --bg: #FAFAFA;
+      --bg-alt: #F3F3F3;
+      --accent: #FF6B1A;
+      --accent-hover: #E55A0A;
+      --accent-soft: rgba(255, 107, 26, 0.08);
+      --accent-border: rgba(255, 107, 26, 0.2);
+      --text: #0F0F0F;
+      --text-sec: #6B6B6B;
+      --text-ter: #ABABAB;
+      --border: #E8E8E8;
+      --card: #FFFFFF;
+      --card-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 4px 16px rgba(0, 0, 0, 0.04);
+      --card-shadow-hover: 0 8px 32px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.06);
+      --radius: 16px;
+      --transition: 0.25s ease;
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0
+    }
+
+    html {
+      scroll-behavior: smooth;
+      font-size: 16px
+    }
+
+    body {
+      font-family: 'Host Grotesk', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased
+    }
+
+    ::selection {
+      background: var(--accent);
+      color: white
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit
+    }
+
+    img {
+      max-width: 100%;
+      display: block
+    }
+
+    button,
+    input,
+    select,
+    textarea {
+      font-family: inherit
+    }
+
+    *:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 3px
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 40px
+    }
+
+    .label {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent)
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 64px
+    }
+
+    .section-header h2 {
+      font-size: 48px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      color: var(--text);
+      margin-top: 12px;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto
+    }
+
+    .section-header p {
+      font-size: 17px;
+      color: var(--text-sec);
+      max-width: 560px;
+      margin: 16px auto 0;
+      line-height: 1.7
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 14px;
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      background: var(--accent-soft);
+      border: 1px solid var(--accent-border);
+      color: var(--accent)
+    }
+
+    .pill-dark {
+      background: var(--text);
+      color: white;
+      border-color: transparent
+    }
+
+    .pill-grey {
+      background: #F0F0F0;
+      color: var(--text-sec);
+      border-color: #E0E0E0
+    }
+
+    .fade-up {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.4s ease, transform 0.4s ease
+    }
+
+    .fade-up.visible {
+      opacity: 1;
+      transform: translateY(0)
+    }
+
+    .stagger-1 {
+      transition-delay: 0ms
+    }
+
+    .stagger-2 {
+      transition-delay: 80ms
+    }
+
+    .stagger-3 {
+      transition-delay: 160ms
+    }
+
+    .stagger-4 {
+      transition-delay: 240ms
+    }
+
+    .stagger-5 {
+      transition-delay: 320ms
+    }
+
+    .stagger-6 {
+      transition-delay: 400ms
+    }
+
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      padding: 0 40px;
+      height: 68px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: background 0.3s ease, box-shadow 0.3s ease
+    }
+
+    nav.scrolled {
+      background: white;
+      box-shadow: 0 1px 0 var(--border)
+    }
+
+    .nav-logo {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 3px;
+      transition: color var(--transition)
+    }
+
+    nav.scrolled .nav-logo {
+      color: var(--text)
+    }
+
+    .nav-logo .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--accent);
+      display: inline-block;
+      margin-left: 2px;
+      vertical-align: super
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 36px;
+      list-style: none
+    }
+
+    .nav-links a {
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--text-sec);
+      position: relative;
+      padding-bottom: 2px;
+      transition: color var(--transition)
+    }
+
+    nav.scrolled .nav-links a {
+      color: var(--text-sec)
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--accent);
+      transition: width 0.25s ease
+    }
+
+    .nav-links a:hover {
+      color: var(--text)
+    }
+
+    nav.scrolled .nav-links a:hover {
+      color: var(--text)
+    }
+
+    .nav-links a:hover::after {
+      width: 100%
+    }
+
+    .nav-cta {
+      background: var(--accent);
+      color: white;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 14px;
+      border: none;
+      cursor: pointer;
+      transition: background var(--transition), transform var(--transition)
+    }
+
+    .nav-cta:hover {
+      background: var(--accent-hover);
+      transform: scale(1.02)
+    }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px
+    }
+
+    .hamburger span {
+      width: 24px;
+      height: 2px;
+      background: var(--text);
+      border-radius: 2px;
+      transition: all 0.3s ease;
+      display: block
+    }
+
+    nav.scrolled .hamburger span {
+      background: var(--text)
+    }
+
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: white;
+      z-index: 99;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 36px
+    }
+
+    .mobile-menu.open {
+      display: flex
+    }
+
+    .mobile-menu a {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--text)
+    }
+
+    .mobile-close {
+      position: absolute;
+      top: 24px;
+      right: 28px;
+      background: none;
+      border: none;
+      font-size: 32px;
+      cursor: pointer;
+      color: var(--text)
+    }
+
+    /* ── HERO ── */
+    #hero {
+      min-height: 100vh;
+      position: relative;
+      background: var(--bg);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 68px;
+    }
+
+    .hero-sticky {
+      display: contents;
+    }
+
+    .hero-glow-right {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: radial-gradient(ellipse 55% 50% at 85% 15%, rgba(255, 107, 26, 0.1) 0%, transparent 65%)
+    }
+
+    .hero-glow-left {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: radial-gradient(ellipse 40% 35% at 10% 40%, rgba(255, 107, 26, 0.05) 0%, transparent 60%)
+    }
+
+    .hero-glow-bottom {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 40%;
+      pointer-events: none;
+      background: radial-gradient(ellipse 70% 60% at 50% 100%, rgba(255, 107, 26, 0.06) 0%, transparent 70%)
+    }
+
+    .hero-grain {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.025;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 200px
+    }
+
+    .hero-grid {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.12;
+      background-image: linear-gradient(rgba(0, 0, 0, 0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 0, 0, 0.5) 1px, transparent 1px);
+      background-size: 80px 80px;
+      mask-image: radial-gradient(ellipse 90% 85% at 50% 40%, black 20%, transparent 100%)
+    }
+
+    .hero-particles {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden
+    }
+
+    .hero-particle {
+      position: absolute;
+      border-radius: 50%;
+      background: var(--accent);
+      opacity: 0;
+      animation: particleDrift linear infinite
+    }
+
+    @keyframes particleDrift {
+      0% {
+        opacity: 0;
+        transform: translateY(0) scale(0)
+      }
+
+      10% {
+        opacity: 0.4;
+        transform: translateY(-10px) scale(1)
+      }
+
+      90% {
+        opacity: 0.1
+      }
+
+      100% {
+        opacity: 0;
+        transform: translateY(-120px) scale(0.5)
+      }
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 10;
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 52px 40px 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 16px 6px 8px;
+      border-radius: 100px;
+      background: var(--accent-soft);
+      border: 1px solid var(--accent-border);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 24px;
+      animation: heroFadeDown 0.8s ease forwards;
+      opacity: 0
+    }
+
+    .hero-badge-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 6px var(--accent);
+      animation: pulseDot 2s ease infinite;
+      flex-shrink: 0
+    }
+
+    @keyframes pulseDot {
+
+      0%,
+      100% {
+        box-shadow: 0 0 4px var(--accent)
+      }
+
+      50% {
+        box-shadow: 0 0 12px var(--accent), 0 0 20px rgba(255, 107, 26, 0.4)
+      }
+    }
+
+    @keyframes heroFadeDown {
+      from {
+        opacity: 0;
+        transform: translateY(-12px)
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0)
+      }
+    }
+
+    .hero-h1 {
+      font-size: clamp(44px, 6vw, 80px);
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      line-height: 1.0;
+      color: var(--text);
+      margin-bottom: 18px;
+      animation: heroFadeUp 0.9s 0.15s ease forwards;
+      opacity: 0
+    }
+
+    .hero-h1 .orange {
+      color: var(--accent);
+      background: rgba(255, 107, 26, 0.08);
+      padding: 0 10px 2px;
+      border-radius: 8px;
+      display: inline-block
+    }
+
+    .hero-h1 .dim {
+      color: var(--text-sec);
+      font-weight: 800
+    }
+
+    .cursor {
+      display: inline-block;
+      width: 4px;
+      height: 0.82em;
+      background: var(--accent);
+      margin-left: 4px;
+      vertical-align: middle;
+      animation: blink 1s step-end infinite
+    }
+
+    @keyframes blink {
+
+      0%,
+      100% {
+        opacity: 1
+      }
+
+      50% {
+        opacity: 0
+      }
+    }
+
+    @keyframes heroFadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px)
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0)
+      }
+    }
+
+    .hero-sub {
+      font-size: 17px;
+      font-weight: 400;
+      color: var(--text-sec);
+      line-height: 1.7;
+      max-width: 540px;
+      margin-bottom: 24px;
+      animation: heroFadeUp 0.9s 0.3s ease forwards;
+      opacity: 0
+    }
+
+    .hero-sub strong {
+      color: var(--text);
+      font-weight: 600
+    }
+
+    .hero-btns {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 24px;
+      animation: heroFadeUp 0.9s 0.45s ease forwards;
+      opacity: 0
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: white;
+      padding: 14px 28px;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 15px;
+      border: none;
+      cursor: pointer;
+      transition: background var(--transition), transform var(--transition), box-shadow var(--transition);
+      white-space: nowrap;
+      position: relative;
+      overflow: hidden
+    }
+
+    .btn-primary::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, transparent 60%);
+      border-radius: inherit
+    }
+
+    .btn-primary:hover {
+      background: var(--accent-hover);
+      transform: scale(1.03);
+      box-shadow: 0 8px 32px rgba(255, 107, 26, 0.3)
+    }
+
+    .btn-ghost {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: transparent;
+      border: 1.5px solid var(--border);
+      color: var(--text-sec);
+      font-weight: 500;
+      font-size: 15px;
+      padding: 14px 24px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all var(--transition)
+    }
+
+    .btn-ghost:hover {
+      border-color: var(--accent);
+      color: var(--text)
+    }
+
+    .hero-metrics {
+      display: flex;
+      gap: 0;
+      margin-bottom: 40px;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+      animation: heroFadeUp 0.9s 0.6s ease forwards;
+      opacity: 0;
+      box-shadow: var(--card-shadow)
+    }
+
+    .metric {
+      flex: 1;
+      padding: 16px 24px;
+      border-right: 1px solid var(--border)
+    }
+
+    .metric:last-child {
+      border-right: none
+    }
+
+    .metric-num {
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--text);
+      line-height: 1
+    }
+
+    .metric-num .accent {
+      color: var(--accent)
+    }
+
+    .metric-label {
+      font-size: 11px;
+      color: var(--text-ter);
+      margin-top: 4px
+    }
+
+    /* Dashboard — centered, 80% width, perspective tilt fixed */
+    .hero-dash-wrap {
+      position: relative;
+      width: 80%;
+      max-width: 1100px;
+      margin: 0 auto 0;
+      animation: heroFadeUp 1s 0.75s ease forwards;
+      opacity: 0;
+      z-index: 2;
+    }
+
+    .hero-dash-glow {
+      position: absolute;
+      bottom: -20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 70%;
+      height: 60px;
+      background: radial-gradient(ellipse, rgba(255, 107, 26, 0.08) 0%, transparent 70%);
+      filter: blur(20px);
+      z-index: 1;
+      pointer-events: none
+    }
+
+    .hero-dash-fade {
+      display: none
+    }
+
+    .dashboard-mock {
+      width: 100%;
+      background: #141414;
+      border-radius: 16px 16px 0 0;
+      padding: 20px 20px 0;
+      box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1), 0 24px 60px rgba(0, 0, 0, 0.18), 0 8px 20px rgba(0, 0, 0, 0.08);
+      transform: perspective(1600px) rotateX(12deg) scale(0.97);
+      transform-origin: center 20%;
+      will-change: transform;
+      position: relative;
+      z-index: 2;
+    }
+
+    .dashboard-mock {
+      width: 100%;
+      background: #141414;
+      border-radius: 16px 16px 0 0;
+      padding: 18px 18px 0;
+      box-shadow:
+        0 0 0 1px rgba(0, 0, 0, 0.1),
+        0 -8px 40px rgba(0, 0, 0, 0.08),
+        0 24px 60px rgba(0, 0, 0, 0.18);
+      transform-origin: center 30%;
+      will-change: transform;
+      position: relative;
+      z-index: 2;
+    }
+
+    .db-topbar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 16px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06)
+    }
+
+    .db-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%
+    }
+
+    .db-title {
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.3);
+      margin-left: 8px;
+      font-weight: 500
+    }
+
+    .db-nav {
+      margin-left: auto;
+      display: flex;
+      gap: 20px
+    }
+
+    .db-nav-item {
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.25);
+      font-weight: 500;
+      padding: 4px 10px;
+      border-radius: 6px
+    }
+
+    .db-nav-item.active {
+      background: rgba(255, 107, 26, 0.15);
+      color: var(--accent)
+    }
+
+    .db-main {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 14px
+    }
+
+    .db-card {
+      background: #1E1E1E;
+      border-radius: 10px;
+      padding: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.05)
+    }
+
+    .db-card-label {
+      font-size: 10px;
+      color: rgba(255, 255, 255, 0.3);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em
+    }
+
+    .db-card-val {
+      font-size: 22px;
+      font-weight: 700;
+      color: white;
+      line-height: 1
+    }
+
+    .db-card-sub {
+      font-size: 10px;
+      color: #4ade80;
+      margin-top: 5px
+    }
+
+    .db-card-sub.orange {
+      color: var(--accent)
+    }
+
+    .db-lower {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 10px;
+      padding-bottom: 20px
+    }
+
+    .db-chart {
+      background: #1E1E1E;
+      border-radius: 10px;
+      padding: 16px
+    }
+
+    .db-chart-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px
+    }
+
+    .db-chart-title {
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.4);
+      text-transform: uppercase;
+      letter-spacing: 0.08em
+    }
+
+    .db-chart-badge {
+      font-size: 10px;
+      color: var(--accent);
+      background: rgba(255, 107, 26, 0.12);
+      padding: 3px 8px;
+      border-radius: 100px;
+      font-weight: 600
+    }
+
+    .db-bars {
+      display: flex;
+      align-items: flex-end;
+      gap: 5px;
+      height: 72px
+    }
+
+    .db-bar {
+      flex: 1;
+      border-radius: 3px 3px 0 0;
+      background: rgba(255, 255, 255, 0.07)
+    }
+
+    .db-bar.accent-bar {
+      background: var(--accent);
+      box-shadow: 0 0 8px rgba(255, 107, 26, 0.4)
+    }
+
+    .db-bar.mid-bar {
+      background: rgba(255, 107, 26, 0.4)
+    }
+
+    .db-agents {
+      background: #1E1E1E;
+      border-radius: 10px;
+      padding: 14px
+    }
+
+    .db-agents-title {
+      font-size: 10px;
+      color: rgba(255, 255, 255, 0.3);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 12px
+    }
+
+    .db-agent-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04)
+    }
+
+    .db-agent-row:last-child {
+      border-bottom: none
+    }
+
+    .db-agent-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #4ade80;
+      flex-shrink: 0;
+      box-shadow: 0 0 4px #4ade80
+    }
+
+    .db-agent-dot.orange {
+      background: var(--accent);
+      box-shadow: 0 0 4px var(--accent)
+    }
+
+    .db-agent-name {
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.55);
+      flex: 1
+    }
+
+    .db-agent-status {
+      font-size: 10px;
+      color: var(--accent);
+      font-weight: 500
+    }
+
+    #nosotros {
+      background: var(--bg-alt);
+      padding: 180px 0 100px;
+      position: relative;
+    }
+
+    .nosotros-grid {
+      display: grid;
+      grid-template-columns: 60% 40%;
+      gap: 80px;
+      align-items: start;
+      margin-bottom: 80px
+    }
+
+    .nosotros-text h2 {
+      font-size: 42px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      margin-top: 12px;
+      line-height: 1.15
+    }
+
+    .nosotros-text p {
+      font-size: 17px;
+      color: var(--text-sec);
+      line-height: 1.75;
+      margin-top: 20px
+    }
+
+    .stat-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px
+    }
+
+    .stat-card {
+      background: var(--card);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: var(--card-shadow);
+      border: 1px solid var(--border)
+    }
+
+    .stat-num {
+      font-size: 48px;
+      font-weight: 800;
+      color: var(--accent);
+      line-height: 1
+    }
+
+    .stat-label {
+      font-size: 13px;
+      color: var(--text-sec);
+      margin-top: 6px
+    }
+
+    .pillars-accordion {
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      overflow: hidden;
+      padding-top: 48px;
+      border-top: none;
+      /* sits below the stats grid */
+    }
+
+    /* Divider above accordion */
+    .pillars-divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 48px 0 0;
+    }
+
+    .acc-item {
+      border-bottom: 1px solid var(--border);
+      position: relative;
+    }
+
+    .acc-item:last-child {
+      border-bottom: none;
+    }
+
+    .acc-trigger {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 24px 28px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      text-align: left;
+      gap: 16px;
+      transition: background var(--transition);
+    }
+
+    .acc-trigger:hover {
+      background: rgba(255, 107, 26, 0.03);
+    }
+
+    .acc-trigger-left {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .acc-trigger-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: var(--accent-soft);
+      border: 1px solid var(--accent-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+
+    .acc-trigger h3 {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--text);
+      margin: 0;
+    }
+
+    .acc-chevron {
+      width: 20px;
+      height: 20px;
+      color: var(--text-ter);
+      flex-shrink: 0;
+      transition: transform 0.3s ease, color 0.25s ease;
+    }
+
+    .acc-item.open .acc-chevron {
+      transform: rotate(180deg);
+      color: var(--accent);
+    }
+
+    .acc-body {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.38s ease;
+    }
+
+    /* CSS drives the open state — no JS scrollHeight needed */
+    .acc-item.open .acc-body {
+      max-height: 600px;
+    }
+
+    .acc-body-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      border-top: 1px solid var(--border);
+    }
+
+    .acc-body-text {
+      padding: 28px 28px 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .acc-body-text p {
+      font-size: 15px;
+      color: var(--text-sec);
+      line-height: 1.75;
+      margin: 0;
+    }
+
+    .acc-body-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--accent);
+      color: white;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      width: fit-content;
+      transition: background var(--transition), transform var(--transition);
+    }
+
+    .acc-body-cta:hover {
+      background: var(--accent-hover);
+      transform: scale(1.02);
+    }
+
+    /* Abstract image panel */
+    .acc-body-img {
+      border-left: 1px solid var(--border);
+      min-height: 200px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .acc-img-mision {
+      background: linear-gradient(135deg,
+          #FF6B1A 0%, #FF9A5A 35%, rgba(255, 107, 26, 0.3) 60%, #FAFAFA 100%);
+    }
+
+    .acc-img-vision {
+      background: linear-gradient(135deg,
+          #0F0F0F 0%, #1a1a2e 40%, #7850FF 75%, #FF6B1A 100%);
+    }
+
+    .acc-img-cobertura {
+      background: linear-gradient(135deg,
+          #0a1628 0%, #0F3460 40%, #16213E 65%, #FF6B1A 100%);
+    }
+
+    /* Decorative dots pattern */
+    .acc-body-img::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(circle, rgba(255, 255, 255, 0.12) 1px, transparent 1px);
+      background-size: 20px 20px;
+    }
+
+    /* Floating stat badge on image */
+    .acc-img-badge {
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 10px;
+      padding: 10px 14px;
+      color: white;
+    }
+
+    .acc-img-badge-num {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--accent);
+    }
+
+    .acc-img-badge-label {
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.5);
+      margin-top: 2px;
+    }
+
+    @media(max-width:768px) {
+      .acc-body-inner {
+        grid-template-columns: 1fr;
+      }
+
+      .acc-body-img {
+        border-left: none;
+        border-top: 1px solid var(--border);
+        min-height: 160px;
+      }
+    }
+
+    /* SERVICIOS — FEATURE CAROUSEL */
+    #servicios {
+      background: var(--bg);
+      padding: 100px 0;
+    }
+
+    .sfc-wrap {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 40px;
+    }
+
+    .sfc-card {
+      position: relative;
+      overflow: hidden;
+      border-radius: 40px;
+      display: flex;
+      flex-direction: row;
+      min-height: 540px;
+      border: 1px solid var(--border);
+      box-shadow: var(--card-shadow);
+    }
+
+    /* LEFT panel — orange chip list */
+    .sfc-left {
+      width: 38%;
+      flex-shrink: 0;
+      background: var(--accent);
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      overflow: hidden;
+      padding: 0 40px;
+    }
+
+    .sfc-left::before,
+    .sfc-left::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 90px;
+      z-index: 10;
+      pointer-events: none;
+    }
+
+    .sfc-left::before {
+      top: 0;
+      background: linear-gradient(to bottom, var(--accent), transparent);
+    }
+
+    .sfc-left::after {
+      bottom: 0;
+      background: linear-gradient(to top, var(--accent), transparent);
+    }
+
+    .sfc-chips {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+    }
+
+    .sfc-chip-item {
+      position: absolute;
+      left: 0;
+      right: 0;
+      display: flex;
+      align-items: center;
+    }
+
+    .sfc-chip {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 13px 20px;
+      border-radius: 100px;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      cursor: pointer;
+      background: transparent;
+      color: rgba(255, 255, 255, 0.6);
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      transition: background 0.4s ease, color 0.4s ease, border-color 0.4s ease;
+      width: 100%;
+      text-align: left;
+    }
+
+    .sfc-chip.active {
+      background: white;
+      color: var(--accent);
+      border-color: white;
+    }
+
+    .sfc-chip-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      background: rgba(255, 255, 255, 0.15);
+      flex-shrink: 0;
+      transition: background 0.4s ease;
+    }
+
+    .sfc-chip.active .sfc-chip-icon {
+      background: rgba(255, 107, 26, 0.12);
+    }
+
+    /* RIGHT panel */
+    .sfc-right {
+      flex: 1;
+      background: white;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 48px;
+      overflow: hidden;
+      border-left: 1px solid var(--border);
+    }
+
+    .sfc-panel {
+      position: absolute;
+      inset: 48px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 20px;
+      opacity: 0;
+      transform: translateX(20px);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+      pointer-events: none;
+    }
+
+    .sfc-panel.active {
+      opacity: 1;
+      transform: translateX(0);
+      pointer-events: auto;
+    }
+
+    .sfc-panel-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      background: var(--accent-soft);
+      border: 1px solid var(--accent-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+    }
+
+    .sfc-panel-title {
+      font-size: clamp(22px, 2.2vw, 32px);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: var(--text);
+      line-height: 1.15;
+    }
+
+    .sfc-panel-desc {
+      font-size: 16px;
+      color: var(--text-sec);
+      line-height: 1.75;
+      max-width: 460px;
+    }
+
+    .sfc-pill {
+      display: inline-flex;
+      align-items: center;
+      background: var(--accent);
+      color: white;
+      padding: 9px 20px;
+      border-radius: 100px;
+      font-size: 13px;
+      font-weight: 700;
+      width: fit-content;
+    }
+
+    .sfc-live {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      padding: 5px 14px 5px 10px;
+      box-shadow: var(--card-shadow);
+    }
+
+    .sfc-live-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #22C55E;
+      animation: livePulse 2s ease infinite;
+    }
+
+    @keyframes livePulse {
+
+      0%,
+      100% {
+        box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.2)
+      }
+
+      50% {
+        box-shadow: 0 0 0 5px rgba(34, 197, 94, 0.1)
+      }
+    }
+
+    .sfc-live-text {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-sec);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    /* chip counter badge */
+    .sfc-counter {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      font-size: 12px;
+      color: var(--text-ter);
+      font-weight: 500;
+      letter-spacing: 0.04em;
+    }
+
+    @media(max-width:768px) {
+      .sfc-card {
+        flex-direction: column;
+        border-radius: 24px;
+        min-height: auto;
+      }
+
+      .sfc-left {
+        width: 100%;
+        min-height: 240px;
+        padding: 28px 20px;
+      }
+
+      .sfc-right {
+        padding: 28px 20px;
+        min-height: 380px;
+      }
+
+      .sfc-panel {
+        inset: 24px;
+      }
+
+      .sfc-wrap {
+        padding: 0 20px;
+      }
+    }
+
+    /* BENEFICIOS — SCROLL EXPAND */
+    #beneficios {
+      background: var(--bg-alt);
+      padding: 100px 0 0;
+    }
+
+    #beneficios .section-header {
+      margin-bottom: 80px;
+    }
+
+    .benefit-scene {
+      height: 280vh;
+      position: relative;
+    }
+
+    .benefit-sticky {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .benefit-bg {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transition: opacity 0.1s linear;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .benefit-bg-1 {
+      background: linear-gradient(135deg, #0C0806 0%, #1A0D07 100%);
+    }
+
+    .benefit-bg-2 {
+      background: linear-gradient(135deg, #060C0A 0%, #071A12 100%);
+    }
+
+    .benefit-bg-3 {
+      background: linear-gradient(135deg, #06080C 0%, #07101A 100%);
+    }
+
+    .benefit-card-wrap {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 2;
+      overflow: hidden;
+      border-radius: 24px;
+      will-change: width, height;
+      background: #141414;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.2), 0 32px 80px rgba(0, 0, 0, 0.4);
+    }
+
+    .benefit-dither-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0.45;
+      mix-blend-mode: screen;
+    }
+
+    .benefit-collapsed {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      padding: 40px;
+      text-align: center;
+      transition: opacity 0.2s ease;
+      z-index: 2;
+    }
+
+    .benefit-collapsed-num {
+      font-size: 72px;
+      font-weight: 800;
+      line-height: 1;
+      color: var(--accent);
+      opacity: 0.2;
+    }
+
+    .benefit-collapsed-title {
+      font-size: clamp(22px, 3vw, 36px);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      color: white;
+      max-width: 500px;
+    }
+
+    .benefit-collapsed-hint {
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.3);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 8px;
+    }
+
+    .benefit-collapsed-hint svg {
+      animation: hintBounce 1.5s ease infinite;
+    }
+
+    @keyframes hintBounce {
+
+      0%,
+      100% {
+        transform: translateY(0)
+      }
+
+      50% {
+        transform: translateY(4px)
+      }
+    }
+
+    .benefit-expanded {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+    }
+
+    .benefit-expanded.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .benefit-exp-left {
+      padding: 56px 48px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 20px;
+      border-right: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .benefit-exp-num {
+      font-size: 100px;
+      font-weight: 800;
+      line-height: 1;
+      color: rgba(255, 107, 26, 0.15);
+      margin-bottom: -20px;
+    }
+
+    .benefit-exp-title {
+      font-size: 32px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      color: white;
+      line-height: 1.15;
+    }
+
+    .benefit-exp-desc {
+      font-size: 16px;
+      color: rgba(255, 255, 255, 0.5);
+      line-height: 1.75;
+    }
+
+    .benefit-exp-pill {
+      display: inline-flex;
+      align-items: center;
+      background: var(--accent);
+      color: white;
+      padding: 8px 20px;
+      border-radius: 100px;
+      font-size: 14px;
+      font-weight: 600;
+      width: fit-content;
+    }
+
+    .benefit-exp-right {
+      padding: 48px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 14px;
+    }
+
+    .bv-bar-row {
+      margin-bottom: 10px;
+    }
+
+    .bv-bar-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.35);
+      margin-bottom: 6px;
+    }
+
+    .bv-bar-track {
+      height: 8px;
+      background: rgba(255, 255, 255, 0.07);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .bv-bar-fill {
+      height: 100%;
+      border-radius: 4px;
+      background: var(--accent);
+      width: 0;
+      transition: width 1.2s ease;
+    }
+
+    .bv-bar-fill.blue {
+      background: #7850FF;
+    }
+
+    .bv-bar-fill.green {
+      background: #22C55E;
+    }
+
+    .bv-team-row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .bv-person {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+    }
+
+    .bv-person.human {
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .bv-person.ai {
+      background: rgba(255, 107, 26, 0.12);
+      border: 1px solid rgba(255, 107, 26, 0.25);
+    }
+
+    .bv-team-label {
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.4);
+      margin-left: 6px;
+    }
+
+    .bv-capacity {
+      background: rgba(255, 107, 26, 0.1);
+      border: 1px solid rgba(255, 107, 26, 0.2);
+      border-radius: 10px;
+      padding: 14px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 8px;
+    }
+
+    .bv-capacity-label {
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.4);
+    }
+
+    .bv-capacity-val {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .bv-tl-step {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+    }
+
+    .bv-tl-check {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .bv-tl-check svg {
+      width: 12px;
+      height: 12px;
+    }
+
+    .bv-tl-text {
+      font-size: 14px;
+      font-weight: 500;
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    .bv-tl-week {
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.3);
+      margin-top: 3px;
+    }
+
+    .bv-tl-line {
+      width: 2px;
+      height: 16px;
+      background: rgba(255, 255, 255, 0.08);
+      margin-left: 12px;
+    }
+
+    .benefit-scene:last-child .benefit-sticky {
+      margin-bottom: 100px;
+    }
+
+    @media(max-width:768px) {
+      .benefit-scene {
+        height: 220vh;
+      }
+
+      .benefit-exp-left {
+        padding: 32px 24px;
+        border-right: none;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      }
+
+      .benefit-exp-right {
+        padding: 24px;
+      }
+
+      .benefit-exp-num {
+        font-size: 60px;
+      }
+
+      .benefit-exp-title {
+        font-size: 22px;
+      }
+
+      .benefit-expanded {
+        grid-template-columns: 1fr;
+        overflow-y: auto;
+      }
+    }
+
+    /* CASOS — CIRCULAR GALLERY */
+    #casos {
+      background: var(--bg);
+      padding: 60px 0 0;
+    }
+
+    #casos .section-header {
+      margin-bottom: 0;
+      padding-bottom: 16px;
+    }
+
+    #casos .section-header h2 {
+      max-width: none;
+      white-space: nowrap;
+      font-size: clamp(28px, 3.5vw, 48px);
+    }
+
+    .cgal-scroll {
+      height: 600px;
+      position: relative;
+    }
+
+    .cgal-sticky {
+      position: relative;
+      top: 0;
+      height: 600px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .cgal-bg {
+      position: absolute;
+      inset: 0;
+      background: var(--bg);
+      z-index: 0;
+    }
+
+    .cgal-bg-glow {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      background:
+        radial-gradient(ellipse 55% 45% at 50% 50%, rgba(255, 107, 26, 0.06) 0%, transparent 70%),
+        radial-gradient(ellipse 35% 25% at 20% 80%, rgba(255, 107, 26, 0.03) 0%, transparent 60%);
+    }
+
+    .cgal-stage {
+      position: relative;
+      z-index: 10;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      perspective: 2200px;
+    }
+
+    .cgal-rotor {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transform-style: preserve-3d;
+      will-change: transform;
+    }
+
+    .cgal-card {
+      position: absolute;
+      width: 280px;
+      height: 380px;
+      left: 50%;
+      top: 50%;
+      margin-left: -140px;
+      margin-top: -190px;
+      transform-style: preserve-3d;
+      transition: opacity 0.3s ease;
+    }
+
+    .cgal-card-inner {
+      width: 100%;
+      height: 100%;
+      border-radius: 20px;
+      overflow: hidden;
+      position: relative;
+      border: 1px solid var(--border);
+      box-shadow: var(--card-shadow-hover);
+    }
+
+    /* Light gradient backgrounds — softer for white mode */
+    .cgal-bg-0 {
+      background: linear-gradient(145deg, #FFF0E8 0%, #FFB380 45%, #FF6B1A 100%);
+    }
+
+    .cgal-bg-1 {
+      background: linear-gradient(145deg, #F0EEFF 0%, #A890FF 45%, #7850FF 100%);
+    }
+
+    .cgal-bg-2 {
+      background: linear-gradient(145deg, #E8FFF2 0%, #6EE7A0 45%, #22C55E 100%);
+    }
+
+    .cgal-bg-3 {
+      background: linear-gradient(145deg, #FFFBEA 0%, #FCD34D 45%, #F59E0B 100%);
+    }
+
+    .cgal-bg-4 {
+      background: linear-gradient(145deg, #E8FAFF 0%, #67E8F9 45%, #06B6D4 100%);
+    }
+
+    .cgal-bg-5 {
+      background: linear-gradient(145deg, #FFF0F4 0%, #FDA4AF 45%, #F43F5E 100%);
+    }
+
+    .cgal-bg-6 {
+      background: linear-gradient(145deg, #F3FFE8 0%, #A3E635 45%, #84CC16 100%);
+    }
+
+    .cgal-card-inner::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E");
+      background-size: 150px;
+      mix-blend-mode: overlay;
+    }
+
+    .cgal-pattern {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      opacity: 0.18;
+    }
+
+    /* Bottom content — dark text on light gradient */
+    .cgal-card-content {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 3;
+      padding: 22px 18px 18px;
+      background: linear-gradient(to top, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.7) 60%, transparent 100%);
+    }
+
+    .cgal-industry-tag {
+      display: inline-flex;
+      align-items: center;
+      background: rgba(255, 107, 26, 0.12);
+      border: 1px solid rgba(255, 107, 26, 0.3);
+      color: var(--accent);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border-radius: 100px;
+      margin-bottom: 8px;
+    }
+
+    .cgal-card-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.25;
+      margin-bottom: 10px;
+      letter-spacing: -0.01em;
+    }
+
+    .cgal-metrics {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .cgal-metric {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      color: var(--text-sec);
+      font-weight: 500;
+    }
+
+    .cgal-metric::before {
+      content: '';
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: var(--accent);
+      flex-shrink: 0;
+    }
+
+    /* TESTIMONIOS — ORBIT CAROUSEL */
+    #testimonios {
+      background: var(--bg);
+      padding: 100px 0;
+    }
+
+    .toc-wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 40px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+
+    /* Left: orbit stage */
+    .toc-stage {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 520px;
+    }
+
+    /* orbit ring */
+    .toc-ring {
+      position: absolute;
+      width: 400px;
+      height: 400px;
+      border-radius: 50%;
+      border: 1px dashed rgba(255, 107, 26, 0.2);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+    }
+
+    .toc-rotor {
+      position: absolute;
+      width: 400px;
+      height: 400px;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      will-change: transform;
+    }
+
+    /* Each orbiting avatar */
+    .toc-avatar-wrap {
+      position: absolute;
+      width: 56px;
+      height: 56px;
+      top: calc(50% - 28px);
+      left: calc(50% - 28px);
+      cursor: pointer;
+    }
+
+    .toc-avatar-img {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      font-weight: 700;
+      border: 2.5px solid var(--border);
+      background: white;
+      box-shadow: var(--card-shadow);
+      transition: border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+      will-change: transform;
+      overflow: hidden;
+      color: white;
+      user-select: none;
+    }
+
+    .toc-avatar-img:hover {
+      transform: scale(1.12);
+      box-shadow: var(--card-shadow-hover);
+    }
+
+    .toc-avatar-img.active {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(255, 107, 26, 0.2);
+      transform: scale(1.18);
+    }
+
+    /* Center card */
+    .toc-center-card {
+      position: relative;
+      z-index: 20;
+      background: white;
+      border-radius: 20px;
+      padding: 28px 24px;
+      width: 220px;
+      border: 1px solid var(--border);
+      box-shadow: 0 8px 40px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+
+    .toc-center-avatar {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      margin: -52px auto 12px;
+      border: 4px solid white;
+      box-shadow: var(--card-shadow);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      font-weight: 700;
+      color: white;
+      overflow: hidden;
+    }
+
+    .toc-center-name {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 2px;
+    }
+
+    .toc-center-role {
+      font-size: 12px;
+      color: var(--text-sec);
+      margin-bottom: 2px;
+    }
+
+    .toc-center-company {
+      font-size: 11px;
+      color: var(--accent);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .toc-center-nav {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .toc-nav-btn {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--bg-alt);
+      border: 1px solid var(--border);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      color: var(--text-sec);
+      transition: all var(--transition);
+    }
+
+    .toc-nav-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .toc-connect-btn {
+      padding: 5px 16px;
+      border-radius: 100px;
+      background: var(--accent);
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 600;
+      font-family: inherit;
+      transition: background var(--transition), transform var(--transition);
+    }
+
+    .toc-connect-btn:hover {
+      background: var(--accent-hover);
+      transform: scale(1.03);
+    }
+
+    /* Dots */
+    .toc-dots {
+      display: flex;
+      gap: 6px;
+      justify-content: center;
+      margin-top: 24px;
+    }
+
+    .toc-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--border);
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      transition: all 0.25s ease;
+    }
+
+    .toc-dot.on {
+      background: var(--accent);
+      width: 18px;
+      border-radius: 3px;
+    }
+
+    /* Right: quote panel */
+    .toc-quote-panel {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 32px;
+    }
+
+    .toc-quote-mark {
+      font-size: 80px;
+      line-height: 1;
+      color: var(--accent);
+      opacity: 0.2;
+      font-family: Georgia, serif;
+      margin-bottom: -32px;
+    }
+
+    .toc-quote-text {
+      font-size: clamp(18px, 2vw, 26px);
+      font-weight: 500;
+      color: var(--text);
+      line-height: 1.6;
+      letter-spacing: -0.01em;
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+
+    .toc-quote-text.fade {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+
+    .toc-quote-author {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .toc-quote-name {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .toc-quote-info {
+      font-size: 13px;
+      color: var(--text-sec);
+    }
+
+    .toc-quote-industry {
+      display: inline-flex;
+      align-items: center;
+      background: var(--accent-soft);
+      border: 1px solid var(--accent-border);
+      color: var(--accent);
+      border-radius: 100px;
+      padding: 4px 12px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-top: 4px;
+      width: fit-content;
+    }
+
+    .toc-stars {
+      color: #F59E0B;
+      font-size: 16px;
+      letter-spacing: 2px;
+      margin-top: 8px;
+    }
+
+    @media(max-width:900px) {
+      .toc-wrap {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+
+      .toc-stage {
+        height: 420px;
+      }
+
+      .toc-ring,
+      .toc-rotor {
+        width: 320px;
+        height: 320px;
+      }
+    }
+
+    @media(max-width:768px) {
+      .toc-stage {
+        height: 380px;
+      }
+
+      .toc-ring,
+      .toc-rotor {
+        width: 280px;
+        height: 280px;
+      }
+    }
+
+    /* FORM */
+    #demo {
+      padding: 100px 0;
+      background: var(--bg-alt);
+    }
+
+    .form-outer {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 40px;
+    }
+
+    .form-card {
+      position: relative;
+      overflow: hidden;
+      border-radius: 32px;
+      border: 1px solid rgba(255, 107, 26, 0.15);
+      background: #0F0F0F;
+      padding: 56px 60px;
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.18);
+    }
+
+    /* dithering canvas sits behind everything */
+    .form-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0.55;
+      mix-blend-mode: screen;
+    }
+
+    .form-inner {
+      position: relative;
+      z-index: 2;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 56px;
+      align-items: start;
+    }
+
+    /* Left: headline */
+    .form-left {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .form-left .pill {
+      background: rgba(255, 107, 26, 0.12);
+      border-color: rgba(255, 107, 26, 0.3);
+      color: rgba(255, 180, 140, 0.9);
+      width: fit-content;
+    }
+
+    .form-left h2 {
+      font-size: clamp(32px, 4vw, 48px);
+      font-weight: 800;
+      letter-spacing: -0.035em;
+      line-height: 1.1;
+      color: white;
+    }
+
+    .form-left h2 span {
+      color: var(--accent);
+    }
+
+    .form-left p {
+      font-size: 16px;
+      color: rgba(255, 255, 255, 0.45);
+      line-height: 1.7;
+    }
+
+    .form-trust {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 8px;
+    }
+
+    .form-trust-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    .form-trust-icon {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: rgba(255, 107, 26, 0.15);
+      border: 1px solid rgba(255, 107, 26, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 10px;
+    }
+
+    /* Right: fields */
+    .form-right {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .form-full {
+      grid-column: 1/-1;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .form-group label {
+      font-size: 12px;
+      font-weight: 500;
+      color: rgba(255, 255, 255, 0.4);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      border: 1.5px solid rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      padding: 11px 14px;
+      font-size: 14px;
+      color: white;
+      background: rgba(255, 255, 255, 0.06);
+      outline: none;
+      transition: border-color var(--transition), box-shadow var(--transition), background var(--transition);
+      width: 100%;
+    }
+
+    .form-group input::placeholder,
+    .form-group textarea::placeholder {
+      color: rgba(255, 255, 255, 0.2);
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: var(--accent);
+      background: rgba(255, 107, 26, 0.06);
+      box-shadow: 0 0 0 3px rgba(255, 107, 26, 0.12);
+    }
+
+    .form-group textarea {
+      resize: none;
+      height: 80px;
+    }
+
+    .form-group select {
+      appearance: none;
+      cursor: pointer;
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .form-group select option {
+      background: #1a1a1a;
+      color: white;
+    }
+
+    .btn-submit {
+      width: 100%;
+      height: 52px;
+      background: var(--accent);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 4px;
+      transition: background var(--transition), transform var(--transition), box-shadow var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-submit::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, transparent 60%);
+    }
+
+    .btn-submit:hover {
+      background: var(--accent-hover);
+      transform: scale(1.01);
+      box-shadow: 0 8px 28px rgba(255, 107, 26, 0.35);
+    }
+
+    .form-disclaimer {
+      text-align: center;
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.25);
+      margin-top: 10px
+    }
+
+    /* FAQ */
+    #faq {
+      background: var(--bg-alt);
+      padding: 100px 0
+    }
+
+    .faq-layout {
+      display: grid;
+      grid-template-columns: 35% 65%;
+      gap: 80px;
+      align-items: start
+    }
+
+    .faq-left {
+      position: sticky;
+      top: 100px
+    }
+
+    .faq-left h2 {
+      font-size: 40px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      margin-top: 12px;
+      line-height: 1.2
+    }
+
+    .faq-left p {
+      font-size: 16px;
+      color: var(--text-sec);
+      margin-top: 16px;
+      margin-bottom: 28px;
+      line-height: 1.7
+    }
+
+    .btn-outline {
+      border: 1.5px solid var(--accent);
+      color: var(--accent);
+      background: transparent;
+      padding: 12px 24px;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 15px;
+      cursor: pointer;
+      transition: all var(--transition)
+    }
+
+    .btn-outline:hover {
+      background: var(--accent);
+      color: white
+    }
+
+    .faq-list {
+      display: flex;
+      flex-direction: column
+    }
+
+    .faq-item {
+      border-bottom: 1px solid var(--border)
+    }
+
+    .faq-q {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 22px 0;
+      cursor: pointer;
+      font-size: 17px;
+      font-weight: 600;
+      color: var(--text);
+      transition: color var(--transition);
+      gap: 16px
+    }
+
+    .faq-q:hover {
+      color: var(--accent)
+    }
+
+    .faq-icon {
+      width: 24px;
+      height: 24px;
+      flex-shrink: 0;
+      font-size: 20px;
+      line-height: 1;
+      color: var(--text-sec);
+      transition: transform 0.25s ease, color 0.25s ease;
+      user-select: none
+    }
+
+    .faq-item.open .faq-icon {
+      transform: rotate(45deg);
+      color: var(--accent)
+    }
+
+    .faq-a {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.35s ease
+    }
+
+    .faq-a-inner {
+      padding: 0 0 20px;
+      font-size: 15px;
+      color: var(--text-sec);
+      line-height: 1.75
+    }
+
+    /* BLOG */
+    #blog {
+      background: var(--bg);
+      padding: 100px 0
+    }
+
+    .blog-featured {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      background: var(--card);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: var(--card-shadow);
+      border: 1px solid var(--border);
+      margin-bottom: 40px;
+      transition: box-shadow var(--transition)
+    }
+
+    .blog-featured:hover {
+      box-shadow: var(--card-shadow-hover)
+    }
+
+    .blog-img-main {
+      background: linear-gradient(135deg, #FF6B1A 0%, #FF9A5A 40%, #FFB380 70%, #7850FF 100%);
+      min-height: 300px
+    }
+
+    .blog-featured-content {
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 16px
+    }
+
+    .blog-featured-content h3 {
+      font-size: 26px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.25;
+      color: var(--text)
+    }
+
+    .blog-featured-content p {
+      font-size: 16px;
+      color: var(--text-sec);
+      line-height: 1.65
+    }
+
+    .blog-meta {
+      font-size: 13px;
+      color: var(--text-ter)
+    }
+
+    .blog-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--accent);
+      font-weight: 600;
+      font-size: 15px;
+      transition: gap var(--transition)
+    }
+
+    .blog-link:hover {
+      gap: 10px
+    }
+
+    .blog-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px
+    }
+
+    .blog-card {
+      background: var(--card);
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      box-shadow: var(--card-shadow);
+      transition: box-shadow var(--transition), transform var(--transition)
+    }
+
+    .blog-card:hover {
+      box-shadow: var(--card-shadow-hover);
+      transform: translateY(-3px)
+    }
+
+    .blog-card-img {
+      height: 180px
+    }
+
+    .blog-card-img.grad1 {
+      background: linear-gradient(135deg, #1A1A2E 0%, #16213E 50%, #0F3460 100%)
+    }
+
+    .blog-card-img.grad2 {
+      background: linear-gradient(135deg, #0F0F0F 0%, #2D2D2D 50%, #FF6B1A 100%)
+    }
+
+    .blog-card-img.grad3 {
+      background: linear-gradient(135deg, #1A1A1A 0%, #7850FF 60%, #FF6B1A 100%)
+    }
+
+    .blog-card-content {
+      padding: 24px
+    }
+
+    .blog-card-content h3 {
+      font-size: 17px;
+      font-weight: 600;
+      margin: 12px 0 8px;
+      line-height: 1.35;
+      color: var(--text)
+    }
+
+    .blog-card-content p {
+      font-size: 14px;
+      color: var(--text-sec);
+      line-height: 1.6
+    }
+
+    .blog-cta-wrap {
+      text-align: center;
+      margin-top: 48px
+    }
+
+    /* PRE-FOOTER & FOOTER */
+    .pre-footer {
+      background: #0F0F0F;
+      padding: 80px 0;
+      text-align: center
+    }
+
+    .pre-footer h2 {
+      font-size: 56px;
+      font-weight: 800;
+      color: white;
+      letter-spacing: -0.04em;
+      margin-bottom: 16px
+    }
+
+    .pre-footer p {
+      font-size: 18px;
+      color: rgba(255, 255, 255, 0.5);
+      max-width: 520px;
+      margin: 0 auto 36px;
+      line-height: 1.65
+    }
+
+    footer {
+      background: #0F0F0F;
+      padding: 60px 0 40px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08)
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1.5fr;
+      gap: 48px;
+      margin-bottom: 48px
+    }
+
+    .footer-brand {
+      display: flex;
+      flex-direction: column;
+      gap: 16px
+    }
+
+    .footer-logo {
+      font-size: 22px;
+      font-weight: 700;
+      color: white;
+      display: flex;
+      align-items: center;
+      gap: 3px
+    }
+
+    .footer-logo .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--accent);
+      display: inline-block;
+      margin-left: 2px;
+      vertical-align: super
+    }
+
+    .footer-tagline {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.4);
+      line-height: 1.6
+    }
+
+    .footer-socials {
+      display: flex;
+      gap: 12px
+    }
+
+    .social-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.07);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(255, 255, 255, 0.5);
+      font-size: 14px;
+      transition: all var(--transition);
+      border: 1px solid rgba(255, 255, 255, 0.08)
+    }
+
+    .social-btn:hover {
+      background: var(--accent);
+      color: white;
+      border-color: transparent
+    }
+
+    .footer-col h4 {
+      font-size: 13px;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.6);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 16px
+    }
+
+    .footer-col ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px
+    }
+
+    .footer-col a {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.4);
+      transition: color var(--transition)
+    }
+
+    .footer-col a:hover {
+      color: white
+    }
+
+    .footer-bottom {
+      border-top: 1px solid rgba(255, 255, 255, 0.07);
+      padding-top: 28px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px
+    }
+
+    .footer-bottom p {
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.25)
+    }
+
+    .footer-legal {
+      display: flex;
+      gap: 24px
+    }
+
+    .footer-legal a {
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.25);
+      transition: color var(--transition)
+    }
+
+    .footer-legal a:hover {
+      color: rgba(255, 255, 255, 0.6)
+    }
+
+    /* RESPONSIVE */
+    @media(max-width:1024px) {
+      .hero-h1 {
+        font-size: 60px
+      }
+
+      .db-main {
+        grid-template-columns: 1fr 1fr
+      }
+
+      .section-header h2 {
+        font-size: 40px
+      }
+
+      .nosotros-grid {
+        grid-template-columns: 1fr;
+        gap: 48px
+      }
+
+      .services-grid {
+        grid-template-columns: repeat(2, 1fr)
+      }
+
+      .benefit-block {
+        grid-template-columns: 1fr;
+        gap: 32px
+      }
+
+      .benefit-block.reverse {
+        direction: ltr
+      }
+
+      .benefit-num {
+        font-size: 80px
+      }
+
+      .faq-layout {
+        grid-template-columns: 1fr;
+        gap: 48px
+      }
+
+      .faq-left {
+        position: relative;
+        top: auto
+      }
+
+      .footer-grid {
+        grid-template-columns: 1fr 1fr
+      }
+    }
+
+    @media(max-width:768px) {
+      .container {
+        padding: 0 24px
+      }
+
+      nav {
+        padding: 0 24px
+      }
+
+      .nav-links,
+      .nav-cta {
+        display: none
+      }
+
+      .hamburger {
+        display: flex
+      }
+
+      #hero {
+        height: auto;
+        min-height: 100vh
+      }
+
+      .hero-sticky {
+        position: relative;
+        height: auto;
+        padding-bottom: 40px
+      }
+
+      .hero-content {
+        padding: 80px 20px 0
+      }
+
+      .hero-dash-wrap {
+        position: relative;
+        bottom: auto;
+        left: auto;
+        transform: none;
+        width: 100%;
+        padding: 0 16px;
+        margin-top: 32px
+      }
+
+      #heroDashboard {
+        transform: none !important
+      }
+
+      .hero-h1 {
+        font-size: 38px
+      }
+
+      .hero-sub {
+        font-size: 16px
+      }
+
+      .hero-metrics {
+        flex-wrap: wrap;
+        border-radius: 12px
+      }
+
+      .metric {
+        min-width: 50%;
+        padding: 14px 16px;
+        border-right: none;
+        border-bottom: 1px solid var(--border)
+      }
+
+      .metric:nth-child(odd) {
+        border-right: 1px solid var(--border)
+      }
+
+      .db-nav {
+        display: none
+      }
+
+      .db-main {
+        grid-template-columns: 1fr 1fr
+      }
+
+      #nosotros {
+        padding: 80px 0 80px
+      }
+
+      .section-header h2 {
+        font-size: 32px
+      }
+
+      .pre-footer h2 {
+        font-size: 36px
+      }
+
+      .services-grid {
+        grid-template-columns: 1fr
+      }
+
+      .cases-grid {
+        grid-template-columns: 1fr
+      }
+
+      .blog-featured {
+        grid-template-columns: 1fr
+      }
+
+      .blog-img-main {
+        min-height: 200px
+      }
+
+      .blog-grid {
+        grid-template-columns: 1fr
+      }
+
+      .form-grid {
+        grid-template-columns: 1fr
+      }
+
+      .footer-grid {
+        grid-template-columns: 1fr
+      }
+
+      .footer-bottom {
+        flex-direction: column;
+        align-items: flex-start
+      }
+
+      .pillars {
+        grid-template-columns: 1fr
+      }
+
+      .stat-grid {
+        grid-template-columns: 1fr 1fr
+      }
+
+      .form-card {
+        padding: 36px 24px
+      }
+
+      .form-inner {
+        grid-template-columns: 1fr
+      }
+
+      .form-outer {
+        padding: 0 20px
+      }
+    }
+
+    @media(max-width:480px) {
+      .hero-h1 {
+        font-size: 36px
+      }
+
+      .hero-btns {
+        flex-direction: column;
+        width: 100%
+      }
+
+      .btn-primary,
+      .btn-ghost {
+        width: 100%;
+        justify-content: center
+      }
+
+      .section-header h2 {
+        font-size: 26px
+      }
+    }
+
+    @media(prefers-reduced-motion:reduce) {
+
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.001ms !important;
+        transition-duration: 0.001ms !important
+      }
+
+      .fade-up {
+        opacity: 1;
+        transform: none
+      }
+
+      .hero-badge,
+      .hero-h1,
+      .hero-sub,
+      .hero-btns,
+      .hero-metrics,
+      .hero-dash-wrap {
+        opacity: 1;
+        animation: none
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAV -->
+  <nav id="navbar">
+    <a href="#" class="nav-logo">Analitia<span class="dot"></span></a>
+    <ul class="nav-links">
+      <li><a href="#nosotros">Nosotros</a></li>
+      <li><a href="#servicios">Servicios</a></li>
+      <li><a href="#beneficios">Beneficios</a></li>
+      <li><a href="#casos">Casos de Éxito</a></li>
+      <li><a href="#blog">Blog</a></li>
+    </ul>
+    <button class="nav-cta" onclick="document.getElementById('demo').scrollIntoView({behavior:'smooth'})">Solicitar
+      Demo</button>
+    <button class="hamburger" id="hamburger" aria-label="Menú"><span></span><span></span><span></span></button>
+  </nav>
+
+  <!-- MOBILE MENU -->
+  <div class="mobile-menu" id="mobileMenu">
+    <button class="mobile-close" id="mobileClose">×</button>
+    <a href="#nosotros" class="mobile-link">Nosotros</a>
+    <a href="#servicios" class="mobile-link">Servicios</a>
+    <a href="#beneficios" class="mobile-link">Beneficios</a>
+    <a href="#casos" class="mobile-link">Casos de Éxito</a>
+    <a href="#blog" class="mobile-link">Blog</a>
+    <button class="btn-primary" onclick="document.getElementById('demo').scrollIntoView({behavior:'smooth'})">Solicitar
+      Demo</button>
+  </div>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="hero-sticky">
+      <div class="hero-glow-right"></div>
+      <div class="hero-glow-left"></div>
+      <div class="hero-glow-bottom"></div>
+      <div class="hero-grain"></div>
+      <div class="hero-grid"></div>
+      <div class="hero-particles" id="heroParticles"></div>
+      <div class="hero-content">
+        <div class="hero-badge"><span class="hero-badge-dot"></span>IA Empresarial · LATAM · CRM + Agentes</div>
+        <h1 class="hero-h1">El CRM que no solo<br><span class="dim">organiza.</span> <span class="orange"
+            id="typedText"></span><span class="cursor" id="cursor"></span></h1>
+        <p class="hero-sub">Analitia combina <strong>CRM inteligente</strong>, automatización de procesos y
+          <strong>agentes de IA</strong> en una sola plataforma. Equipos híbridos que producen más sin crecer en nómina.
+        </p>
+        <div class="hero-btns">
+          <button class="btn-primary"
+            onclick="document.getElementById('demo').scrollIntoView({behavior:'smooth'})">Solicitar una Demo →</button>
+          <button class="btn-ghost"
+            onclick="document.getElementById('servicios').scrollIntoView({behavior:'smooth'})">Ver cómo funciona <svg
+              width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="m6 9 6 6 6-6" />
+            </svg></button>
+        </div>
+        <div class="hero-metrics">
+          <div class="metric">
+            <div class="metric-num"><span id="m-clients">0</span><span class="accent">+</span></div>
+            <div class="metric-label">Clientes corporativos activos</div>
+          </div>
+          <div class="metric">
+            <div class="metric-num"><span class="accent">4</span> sem.</div>
+            <div class="metric-label">Implementación promedio</div>
+          </div>
+          <div class="metric">
+            <div class="metric-num"><span id="m-years">0</span> años</div>
+            <div class="metric-label">Transformando LATAM</div>
+          </div>
+          <div class="metric">
+            <div class="metric-num"><span class="accent">–70%</span></div>
+            <div class="metric-label">Reducción tareas operativas</div>
+          </div>
+        </div>
+      </div>
+      <div class="hero-dash-wrap">
+        <div class="hero-dash-glow"></div>
+        <div class="dashboard-mock" id="heroDashboard">
+          <div class="db-topbar">
+            <div class="db-dot" style="background:#FF5F57"></div>
+            <div class="db-dot" style="background:#FFBD2E"></div>
+            <div class="db-dot" style="background:#28C840"></div>
+            <span class="db-title">Analitia CRM · Dashboard Principal</span>
+            <div class="db-nav">
+              <span class="db-nav-item active">Resumen</span>
+              <span class="db-nav-item">Pipeline</span>
+              <span class="db-nav-item">Agentes</span>
+              <span class="db-nav-item">Analítica</span>
+            </div>
+          </div>
+          <div class="db-main">
+            <div class="db-card">
+              <div class="db-card-label">Leads Activos</div>
+              <div class="db-card-val" id="db-leads">0</div>
+              <div class="db-card-sub">↑ +24% vs mes anterior</div>
+            </div>
+            <div class="db-card">
+              <div class="db-card-label">Tasa de Cierre</div>
+              <div class="db-card-val" id="db-rate">0%</div>
+              <div class="db-card-sub">↑ +12pts con IA</div>
+            </div>
+            <div class="db-card">
+              <div class="db-card-label">Tickets Resueltos</div>
+              <div class="db-card-val" id="db-tickets">0</div>
+              <div class="db-card-sub orange">24/7 automatizado</div>
+            </div>
+            <div class="db-card">
+              <div class="db-card-label">Pipeline COP</div>
+              <div class="db-card-val" id="db-pipeline">$0M</div>
+              <div class="db-card-sub orange">↑ Proyección Q4</div>
+            </div>
+          </div>
+          <div class="db-lower">
+            <div class="db-chart">
+              <div class="db-chart-header"><span class="db-chart-title">Rendimiento Semanal</span><span
+                  class="db-chart-badge">+38% vs período anterior</span></div>
+              <div class="db-bars">
+                <div class="db-bar" style="height:38%"></div>
+                <div class="db-bar mid-bar" style="height:52%"></div>
+                <div class="db-bar accent-bar" style="height:68%"></div>
+                <div class="db-bar" style="height:48%"></div>
+                <div class="db-bar mid-bar" style="height:72%"></div>
+                <div class="db-bar accent-bar" style="height:86%"></div>
+                <div class="db-bar" style="height:60%"></div>
+                <div class="db-bar accent-bar" style="height:100%"></div>
+                <div class="db-bar mid-bar" style="height:78%"></div>
+              </div>
+            </div>
+            <div class="db-agents">
+              <div class="db-agents-title">Agentes IA activos</div>
+              <div class="db-agent-row">
+                <div class="db-agent-dot"></div>
+                <div class="db-agent-name">Agente Comercial</div>
+                <div class="db-agent-status">Ejecutando</div>
+              </div>
+              <div class="db-agent-row">
+                <div class="db-agent-dot"></div>
+                <div class="db-agent-name">Servicio 24/7</div>
+                <div class="db-agent-status">23 tickets</div>
+              </div>
+              <div class="db-agent-row">
+                <div class="db-agent-dot orange"></div>
+                <div class="db-agent-name">Documental</div>
+                <div class="db-agent-status">5 docs</div>
+              </div>
+              <div class="db-agent-row">
+                <div class="db-agent-dot"></div>
+                <div class="db-agent-name">Analítica</div>
+                <div class="db-agent-status">Prediciendo</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="hero-dash-fade"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- NOSOTROS -->
+  <section id="nosotros">
+    <div class="container">
+      <div class="section-header fade-up">
+        <span class="label">Nosotros</span>
+        <h2 style="max-width: 1000px;">Nacimos para cerrar la brecha<br>entre tecnología y resultados reales.</h2>
+        <p style="max-width: 800px;">Somos un equipo de especialistas en IA, CRM y automatización que<br>decidió
+          construir la plataforma que el mercado latinoamericano necesitaba.</p>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;margin-top:56px">
+        <div class="nosotros-text fade-up">
+          <span class="label">Nuestra historia</span>
+          <h2>De implementadores a constructores</h2>
+          <p>Analitia nació de años trabajando en la primera línea de la transformación digital: implementando CRMs,
+            consultando en automatización y viendo de cerca un problema recurrente. Las empresas latinoamericanas
+            adoptaban tecnología, pero la tecnología no se adaptaba a ellas. Los procesos eran manuales, los datos
+            vivían en silos y los equipos pasaban más tiempo gestionando herramientas que atendiendo clientes.</p>
+          <p>Así construimos Analitia: una plataforma que no solo organiza datos, sino que actúa sobre ellos. Combinamos
+            CRM inteligente con agentes de IA entrenados por industria, creando el primer sistema donde el software
+            trabaja tan activamente como el equipo humano — sin reemplazarlo, sino potenciándolo.</p>
+        </div>
+      <!-- Radial Orbital Timeline -->
+      <style>
+        .rot-container {
+          position: relative;
+          width: 100%;
+          height: 480px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: default;
+          background: transparent;
+        }
+        .rot-orbit-ring {
+          position: absolute;
+          width: 420px;
+          height: 420px;
+          border-radius: 50%;
+          border: 1.5px solid rgba(0,0,0,0.08);
+          top: 50%; left: 50%;
+          transform: translate(-50%,-50%);
+          pointer-events: none;
+        }
+        .rot-center {
+          position: absolute;
+          width: 64px; height: 64px;
+          border-radius: 50%;
+          background: linear-gradient(135deg, var(--accent) 0%, #ff9a4d 100%);
+          top: 50%; left: 50%;
+          transform: translate(-50%,-50%);
+          display: flex; align-items: center; justify-content: center;
+          z-index: 10;
+          box-shadow: 0 0 0 12px rgba(255,107,26,0.10), 0 0 0 24px rgba(255,107,26,0.05);
+          animation: rotPulseCenter 2.5s ease infinite;
+        }
+        @keyframes rotPulseCenter {
+          0%,100% { box-shadow: 0 0 0 12px rgba(255,107,26,0.10),0 0 0 24px rgba(255,107,26,0.04); }
+          50%      { box-shadow: 0 0 0 18px rgba(255,107,26,0.14),0 0 0 34px rgba(255,107,26,0.06); }
+        }
+        .rot-center-inner {
+          width: 30px; height: 30px; border-radius: 50%;
+          background: rgba(255,255,255,0.9);
+          backdrop-filter: blur(8px);
+        }
+        .rot-node {
+          position: absolute;
+          top: 50%; left: 50%;
+          transform: translate(-50%,-50%);
+          cursor: pointer;
+          transition: all 0.7s cubic-bezier(0.34,1.1,0.64,1);
+          z-index: 5;
+        }
+        .rot-node-glow {
+          position: absolute;
+          border-radius: 50%;
+          background: radial-gradient(circle, rgba(255,107,26,0.18) 0%, transparent 70%);
+          pointer-events: none;
+        }
+        .rot-node-btn {
+          width: 44px; height: 44px;
+          border-radius: 50%;
+          border: 2px solid rgba(0,0,0,0.15);
+          background: #fff;
+          display: flex; align-items: center; justify-content: center;
+          font-size: 18px;
+          transition: all 0.3s ease;
+          box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+          position: relative; z-index: 2;
+        }
+        .rot-node.active .rot-node-btn {
+          background: var(--accent);
+          border-color: var(--accent);
+          transform: scale(1.35);
+          box-shadow: 0 4px 20px rgba(255,107,26,0.35);
+        }
+        .rot-node.related .rot-node-btn {
+          border-color: var(--accent);
+          animation: rotPulseNode 1.2s ease infinite;
+        }
+        @keyframes rotPulseNode {
+          0%,100% { box-shadow: 0 0 0 0 rgba(255,107,26,0.3); }
+          50%      { box-shadow: 0 0 0 8px rgba(255,107,26,0); }
+        }
+        .rot-node-label {
+          position: absolute;
+          top: 52px; left: 50%;
+          transform: translateX(-50%);
+          white-space: nowrap;
+          font-size: 11px;
+          font-weight: 700;
+          letter-spacing: 0.06em;
+          color: rgba(0,0,0,0.55);
+          text-transform: uppercase;
+          transition: all 0.3s ease;
+        }
+        .rot-node.active .rot-node-label {
+          color: var(--accent);
+          transform: translateX(-50%) scale(1.1);
+        }
+        /* Detail card */
+        .rot-detail-card {
+          position: absolute;
+          background: #fff;
+          border: 1px solid rgba(0,0,0,0.08);
+          border-radius: 16px;
+          box-shadow: 0 8px 40px rgba(0,0,0,0.12);
+          padding: 20px;
+          width: 240px;
+          top: calc(100% + 14px);
+          left: 50%;
+          transform: translateX(-50%);
+          z-index: 100;
+          animation: rotCardIn 0.25s ease;
+        }
+        @keyframes rotCardIn {
+          from { opacity:0; transform: translateX(-50%) translateY(8px); }
+          to   { opacity:1; transform: translateX(-50%) translateY(0); }
+        }
+        .rot-card-connector {
+          position: absolute;
+          top: -8px; left: 50%;
+          transform: translateX(-50%);
+          width: 1px; height: 8px;
+          background: rgba(0,0,0,0.15);
+        }
+        .rot-card-badge {
+          display: inline-flex;
+          align-items: center;
+          gap: 5px;
+          font-size: 10px;
+          font-weight: 700;
+          letter-spacing: 0.08em;
+          text-transform: uppercase;
+          color: var(--accent);
+          background: rgba(255,107,26,0.08);
+          border: 1px solid rgba(255,107,26,0.2);
+          border-radius: 20px;
+          padding: 2px 8px;
+          margin-bottom: 8px;
+        }
+        .rot-card-title {
+          font-size: 14px;
+          font-weight: 700;
+          color: var(--text);
+          margin-bottom: 8px;
+        }
+        .rot-card-content {
+          font-size: 12px;
+          color: var(--text-sec);
+          line-height: 1.65;
+          margin-bottom: 12px;
+        }
+        .rot-card-energy {
+          margin-bottom: 10px;
+        }
+        .rot-card-energy-label {
+          display: flex;
+          justify-content: space-between;
+          font-size: 10px;
+          color: rgba(0,0,0,0.4);
+          margin-bottom: 4px;
+        }
+        .rot-card-energy-track {
+          height: 3px;
+          background: rgba(0,0,0,0.07);
+          border-radius: 4px;
+          overflow: hidden;
+        }
+        .rot-card-energy-fill {
+          height: 100%;
+          border-radius: 4px;
+          background: linear-gradient(90deg, var(--accent), #ff9a4d);
+          transition: width 0.6s ease;
+        }
+        .rot-card-related {
+          border-top: 1px solid rgba(0,0,0,0.07);
+          padding-top: 10px;
+        }
+        .rot-card-related-title {
+          font-size: 10px;
+          font-weight: 700;
+          text-transform: uppercase;
+          letter-spacing: 0.07em;
+          color: rgba(0,0,0,0.35);
+          margin-bottom: 6px;
+        }
+        .rot-card-related-btns {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 4px;
+        }
+        .rot-card-related-btn {
+          font-size: 11px;
+          padding: 3px 8px;
+          border: 1px solid rgba(0,0,0,0.12);
+          border-radius: 6px;
+          background: transparent;
+          color: var(--text);
+          cursor: pointer;
+          transition: all 0.2s;
+        }
+        .rot-card-related-btn:hover {
+          background: rgba(255,107,26,0.06);
+          border-color: var(--accent);
+          color: var(--accent);
+        }
+        .rot-info-panel {
+          position: absolute;
+          right: 0; top: 50%;
+          transform: translateY(-50%);
+          width: 220px;
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+        }
+        .rot-info-stat {
+          background: #fff;
+          border: 1px solid rgba(0,0,0,0.07);
+          border-radius: 14px;
+          padding: 16px 20px;
+          box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+        }
+        .rot-info-stat-num {
+          font-size: 28px;
+          font-weight: 800;
+          color: var(--accent);
+          line-height: 1;
+        }
+        .rot-info-stat-label {
+          font-size: 12px;
+          color: var(--text-sec);
+          margin-top: 4px;
+        }
+      </style>
+
+      <div class="rot-container fade-up" id="rotContainer">
+        <!-- orbit ring -->
+        <div class="rot-orbit-ring"></div>
+        <!-- center -->
+        <div class="rot-center">
+          <div class="rot-center-inner"></div>
+        </div>
+        <!-- nodes rendered by JS -->
+        <div id="rotNodesRoot"></div>
+      </div>
+
+      <script>
+      (function () {
+        const DATA = [
+          {
+            id: 1, title: 'Misión', icon: '🎯', category: 'Propósito', energy: 100,
+            relatedIds: [2, 3],
+            content: 'Democratizar la IA empresarial en Latinoamérica, haciendo que cualquier empresa pueda operar con la inteligencia y eficiencia de una corporación global.'
+          },
+          {
+            id: 2, title: 'Visión', icon: '🔭', category: 'Futuro', energy: 85,
+            relatedIds: [1],
+            content: 'Para 2030, ser la plataforma de operaciones con IA más confiable de Latinoamérica, presente en cada empresa que quiera escalar sin perder el control.'
+          },
+          {
+            id: 3, title: 'Cobertura', icon: '🌎', category: 'Expansión', energy: 70,
+            relatedIds: [1],
+            content: 'Operamos en Colombia, México, Perú y Chile. En 2025 expandimos hacia Ecuador, Argentina y el mercado hispano de Estados Unidos.'
+          },
+          {
+            id: 4, title: 'Equipo', icon: '👥', category: 'Personas', energy: 90,
+            relatedIds: [1, 2],
+            content: 'Más de 45 especialistas en IA, CRM y automatización comprometidos con transformar la operación de cada cliente.'
+          },
+          {
+            id: 5, title: 'Tecnología', icon: '⚡', category: 'Innovación', energy: 95,
+            relatedIds: [1, 3],
+            content: 'Agentes de IA entrenados por industria que integran CRM inteligente con automatización de procesos, creando un sistema que actúa sobre los datos.'
+          },
+        ];
+
+        const RADIUS = 185;
+        const root = document.getElementById('rotNodesRoot');
+        const container = document.getElementById('rotContainer');
+        let angle = 0;
+        let autoTimer = null;
+        let animTimer = null;
+        let activeId = null;
+        let nodeEls = {};
+        const AUTO_MS = 40;
+
+        function buildNodes() {
+          root.innerHTML = '';
+          nodeEls = {};
+          DATA.forEach((item, i) => {
+            const el = document.createElement('div');
+            el.className = 'rot-node';
+            el.id = 'rot-n-' + item.id;
+            el.innerHTML = `
+              <div class="rot-node-glow" style="width:${item.energy*0.4+40}px;height:${item.energy*0.4+40}px;left:-${(item.energy*0.4+40-44)/2}px;top:-${(item.energy*0.4+40-44)/2}px"></div>
+              <div class="rot-node-btn">${item.icon}</div>
+              <div class="rot-node-label">${item.title}</div>
+            `;
+            el.addEventListener('click', (e) => { e.stopPropagation(); toggleNode(item.id); });
+            root.appendChild(el);
+            nodeEls[item.id] = el;
+          });
+        }
+
+        function getNodeAngle(id) {
+          const i = DATA.findIndex(d => d.id === id);
+          return ((i / DATA.length) * 360 + angle) % 360;
+        }
+
+        /* Animate orbit angle so the clicked node reaches top (270°) */
+        function snapToTop(id) {
+          stopAuto();
+          if (animTimer) { clearInterval(animTimer); animTimer = null; }
+          const i = DATA.findIndex(d => d.id === id);
+          // target angle: we need ((i/N)*360 + angle) % 360 = 270
+          // so angle_target = (270 - (i/N)*360) mod 360
+          const baseOffset = (i / DATA.length) * 360;
+          let targetAngle = (270 - baseOffset % 360 + 360) % 360;
+          // find shortest path
+          let current = angle % 360;
+          if (current < 0) current += 360;
+          let diff = targetAngle - current;
+          if (diff > 180) diff -= 360;
+          if (diff < -180) diff += 360;
+          const steps = 40;
+          let step = 0;
+          animTimer = setInterval(() => {
+            step++;
+            const t = step / steps;
+            const ease = t < 0.5 ? 2*t*t : -1+(4-2*t)*t; // easeInOut
+            angle = (current + diff * ease + 360) % 360;
+            positionNodes();
+            if (step >= steps) {
+              clearInterval(animTimer);
+              animTimer = null;
+              angle = (targetAngle + 360) % 360;
+              positionNodes();
+            }
+          }, 16);
+        }
+
+        function positionNodes() {
+          DATA.forEach((item, i) => {
+            const a = ((i / DATA.length) * 360 + angle) % 360;
+            const rad = (a * Math.PI) / 180;
+            const x = RADIUS * Math.cos(rad);
+            const y = RADIUS * Math.sin(rad);
+            const zIdx = Math.round(100 + 50 * Math.cos(rad));
+            // always force opacity=1 on active node
+            const op = activeId === item.id ? 1 : Math.max(0.35, Math.min(1, 0.35 + 0.65 * ((1 + Math.sin(rad)) / 2)));
+            const el = nodeEls[item.id];
+            if (!el) return;
+            el.style.transform = `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))`;
+            el.style.zIndex = activeId === item.id ? 200 : zIdx;
+            el.style.opacity = op;
+          });
+          // reposition floating card if open
+          repositionCard();
+        }
+
+        /* Card is appended to container (not the node) so it's always fully visible */
+        function repositionCard() {
+          const card = document.getElementById('rot-card');
+          if (!card || activeId === null) return;
+          const i = DATA.findIndex(d => d.id === activeId);
+          if (i < 0) return;
+          const a = ((i / DATA.length) * 360 + angle) % 360;
+          const rad = (a * Math.PI) / 180;
+          const x = RADIUS * Math.cos(rad);
+          const y = RADIUS * Math.sin(rad);
+          // place card below the node, clamped inside container
+          const cardW = 250;
+          const contW = container.offsetWidth;
+          const rawLeft = contW / 2 + x;
+          const clampedLeft = Math.min(Math.max(rawLeft, cardW/2 + 8), contW - cardW/2 - 8);
+          card.style.left = clampedLeft + 'px';
+          card.style.top = (container.offsetHeight / 2 + y + 36) + 'px';
+        }
+
+        function toggleNode(id) {
+          if (activeId === id) {
+            activeId = null;
+            startAuto();
+            refreshClasses();
+            removeCard();
+          } else {
+            activeId = id;
+            refreshClasses();
+            showCard(id);
+            snapToTop(id);
+          }
+        }
+
+        function refreshClasses() {
+          const relIds = activeId ? (DATA.find(d=>d.id===activeId)||{relatedIds:[]}).relatedIds : [];
+          DATA.forEach(item => {
+            const el = nodeEls[item.id];
+            if (!el) return;
+            el.classList.toggle('active', item.id === activeId);
+            el.classList.toggle('related', relIds.includes(item.id));
+          });
+        }
+
+        function showCard(id) {
+          removeCard();
+          const item = DATA.find(d=>d.id===id);
+          if (!item) return;
+          const relatedHTML = item.relatedIds.length ? `
+            <div class="rot-card-related">
+              <div class="rot-card-related-title">Conectado con</div>
+              <div class="rot-card-related-btns">
+                ${item.relatedIds.map(rid => {
+                  const r = DATA.find(d=>d.id===rid);
+                  return r ? `<button class="rot-card-related-btn" onclick="event.stopPropagation();rotToggleExt(${rid})">${r.icon} ${r.title}</button>` : '';
+                }).join('')}
+              </div>
+            </div>` : '';
+          const card = document.createElement('div');
+          card.className = 'rot-detail-card';
+          card.id = 'rot-card';
+          /* Float the card absolutely inside the container */
+          card.style.position = 'absolute';
+          card.style.opacity = '1';
+          card.style.pointerEvents = 'auto';
+          card.innerHTML = `
+            <div class="rot-card-badge">${item.icon} ${item.category}</div>
+            <div class="rot-card-title">${item.title}</div>
+            <div class="rot-card-content">${item.content}</div>
+            <div class="rot-card-energy">
+              <div class="rot-card-energy-label"><span>Relevancia</span><span>${item.energy}%</span></div>
+              <div class="rot-card-energy-track"><div class="rot-card-energy-fill" style="width:${item.energy}%"></div></div>
+            </div>
+            ${relatedHTML}
+          `;
+          card.addEventListener('click', e => e.stopPropagation());
+          container.appendChild(card);
+          // initial position
+          const i = DATA.findIndex(d => d.id === id);
+          const a = ((i / DATA.length) * 360 + angle) % 360;
+          const rad = (a * Math.PI) / 180;
+          const x = RADIUS * Math.cos(rad);
+          const y = RADIUS * Math.sin(rad);
+          const cardW = 250;
+          const contW = container.offsetWidth;
+          const rawLeft = contW / 2 + x;
+          const clampedLeft = Math.min(Math.max(rawLeft, cardW/2 + 8), contW - cardW/2 - 8);
+          card.style.left = clampedLeft + 'px';
+          card.style.top = (container.offsetHeight / 2 + y + 36) + 'px';
+          card.style.transform = 'translateX(-50%)';
+        }
+
+        function removeCard() {
+          const old = document.getElementById('rot-card');
+          if (old) old.remove();
+        }
+
+        window.rotToggleExt = function(id) { toggleNode(id); };
+
+        container.addEventListener('click', () => {
+          if (activeId !== null) {
+            activeId = null;
+            refreshClasses();
+            removeCard();
+            startAuto();
+          }
+        });
+
+        function tick() {
+          angle = (angle + 0.28) % 360;
+          positionNodes();
+        }
+
+        function startAuto() {
+          stopAuto();
+          autoTimer = setInterval(tick, AUTO_MS);
+        }
+        function stopAuto() {
+          if (autoTimer) { clearInterval(autoTimer); autoTimer = null; }
+        }
+
+        buildNodes();
+        positionNodes();
+        startAuto();
+      })();
+      </script>
+      </div> <!-- close 2-col grid -->
+    </div>
+  </section>
+
+  <!-- SERVICIOS -->
+  <section id="servicios">
+    <div class="container">
+      <div class="section-header fade-up">
+        <span class="label">Servicios</span>
+        <h2>Todo lo que necesitas para automatizar tus operaciones en un solo lugar.</h2>
+        <p>Una plataforma unificada que reemplaza múltiples herramientas y las conecta con inteligencia.</p>
+      </div>
+    </div>
+    <div class="sfc-wrap fade-up">
+      <div class="sfc-card">
+
+        <!-- LEFT: chips -->
+        <div class="sfc-left">
+          <div class="sfc-chips" id="sfcChips">
+            <div class="sfc-chip-item" id="sfc-item-0"><button class="sfc-chip active" onclick="sfcGo(0)">
+                <div class="sfc-chip-icon">🧠</div><span>CRM Inteligente</span>
+              </button></div>
+            <div class="sfc-chip-item" id="sfc-item-1"><button class="sfc-chip" onclick="sfcGo(1)">
+                <div class="sfc-chip-icon">⚡</div><span>Agentes Comerciales IA</span>
+              </button></div>
+            <div class="sfc-chip-item" id="sfc-item-2"><button class="sfc-chip" onclick="sfcGo(2)">
+                <div class="sfc-chip-icon">💬</div><span>Servicio al Cliente 24/7</span>
+              </button></div>
+            <div class="sfc-chip-item" id="sfc-item-3"><button class="sfc-chip" onclick="sfcGo(3)">
+                <div class="sfc-chip-icon">⚙️</div><span>Agentes Operativos</span>
+              </button></div>
+            <div class="sfc-chip-item" id="sfc-item-4"><button class="sfc-chip" onclick="sfcGo(4)">
+                <div class="sfc-chip-icon">📊</div><span>Analítica Predictiva</span>
+              </button></div>
+            <div class="sfc-chip-item" id="sfc-item-5"><button class="sfc-chip" onclick="sfcGo(5)">
+                <div class="sfc-chip-icon">📁</div><span>Gestión Documental IA</span>
+              </button></div>
+            <div class="sfc-chip-item" id="sfc-item-6"><button class="sfc-chip" onclick="sfcGo(6)">
+                <div class="sfc-chip-icon">🔗</div><span>Integración Multicanal</span>
+              </button></div>
+          </div>
+        </div>
+
+        <!-- RIGHT: panels -->
+        <div class="sfc-right">
+          <div class="sfc-live">
+            <div class="sfc-live-dot"></div><span class="sfc-live-text">Activo ahora</span>
+          </div>
+          <div class="sfc-counter" id="sfcCounter">1 / 7</div>
+
+          <div class="sfc-panel active" id="sfc-panel-0">
+            <div class="sfc-panel-icon">🧠</div>
+            <div class="sfc-panel-title">CRM Inteligente</div>
+            <div class="sfc-panel-desc">Gestión completa del ciclo comercial con visibilidad total de cada oportunidad,
+              contacto y actividad en tiempo real. Nunca más una oportunidad sin seguimiento.</div>
+            <span class="sfc-pill">Pipeline en tiempo real</span>
+          </div>
+          <div class="sfc-panel" id="sfc-panel-1">
+            <div class="sfc-panel-icon">⚡</div>
+            <div class="sfc-panel-title">Agentes Comerciales IA</div>
+            <div class="sfc-panel-desc">Automatizan seguimientos, cotizaciones, calificación de leads y recordatorios de
+              forma autónoma. Tu fuerza de ventas siempre activa, incluso fuera de horario.</div>
+            <span class="sfc-pill">Seguimientos automáticos 24/7</span>
+          </div>
+          <div class="sfc-panel" id="sfc-panel-2">
+            <div class="sfc-panel-icon">💬</div>
+            <div class="sfc-panel-title">Servicio al Cliente 24/7</div>
+            <div class="sfc-panel-desc">Gestionan PQRS, tickets y solicitudes frecuentes de forma autónoma las 24 horas
+              del día, con escalamiento inteligente a un humano cuando es necesario.</div>
+            <span class="sfc-pill">–96% tiempo de respuesta</span>
+          </div>
+          <div class="sfc-panel" id="sfc-panel-3">
+            <div class="sfc-panel-icon">⚙️</div>
+            <div class="sfc-panel-title">Agentes Operativos</div>
+            <div class="sfc-panel-desc">Ejecutan procesos internos, validaciones y flujos documentales sin intervención
+              manual. Desde aprobaciones hasta generación de reportes automáticos.</div>
+            <span class="sfc-pill">Cero intervención manual</span>
+          </div>
+          <div class="sfc-panel" id="sfc-panel-4">
+            <div class="sfc-panel-icon">📊</div>
+            <div class="sfc-panel-title">Analítica Predictiva</div>
+            <div class="sfc-panel-desc">Anticipa riesgo de abandono, probabilidad de compra y proyecciones comerciales
+              con modelos de IA entrenados con datos de tu propia industria.</div>
+            <span class="sfc-pill">Predicción de abandono y compra</span>
+          </div>
+          <div class="sfc-panel" id="sfc-panel-5">
+            <div class="sfc-panel-icon">📁</div>
+            <div class="sfc-panel-title">Gestión Documental IA</div>
+            <div class="sfc-panel-desc">Procesamiento inteligente de contratos, facturas y documentos integrado
+              directamente en tus flujos de trabajo existentes. Extrae, clasifica y acciona.</div>
+            <span class="sfc-pill">Documentos en segundos</span>
+          </div>
+          <div class="sfc-panel" id="sfc-panel-6">
+            <div class="sfc-panel-icon">🔗</div>
+            <div class="sfc-panel-title">Integración Multicanal</div>
+            <div class="sfc-panel-desc">Conecta WhatsApp, email, ERP y más en un solo flujo. Tus agentes actúan en todos
+              los canales simultáneamente sin esfuerzo de tu equipo.</div>
+            <span class="sfc-pill">Todos tus canales unidos</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- BENEFICIOS -->
+  <section id="beneficios">
+    <div class="container">
+      <div class="section-header fade-up">
+        <span class="label">Beneficios</span>
+        <h2>Convierte procesos manuales en operaciones inteligentes.</h2>
+      </div>
+    </div>
+
+    <!-- Scene 01 -->
+    <div class="benefit-scene" data-scene="1">
+      <div class="benefit-sticky">
+        <div class="benefit-bg benefit-bg-1" id="bbg1"></div>
+        <div class="benefit-card-wrap" id="bcard1">
+          <canvas class="benefit-dither-canvas" id="bdither1"></canvas>
+          <div class="benefit-collapsed" id="bcollapsed1">
+            <div class="benefit-collapsed-num">01</div>
+            <div class="benefit-collapsed-title">Reduce drásticamente los tiempos operativos</div>
+
+          </div>
+          <div class="benefit-expanded" id="bexpanded1">
+            <div class="benefit-exp-left">
+              <div class="benefit-exp-num">01</div>
+              <div class="benefit-exp-title">Reduce drásticamente los tiempos operativos</div>
+              <div class="benefit-exp-desc">La IA asume las tareas repetitivas que consumen el tiempo de tu equipo:
+                seguimientos, actualizaciones de estado, generación de reportes y validaciones rutinarias.</div>
+              <span class="benefit-exp-pill">–70% tiempo en tareas operativas</span>
+            </div>
+            <div class="benefit-exp-right">
+              <div class="bv-bar-row">
+                <div class="bv-bar-label"><span>Seguimientos automatizados</span><span>92%</span></div>
+                <div class="bv-bar-track">
+                  <div class="bv-bar-fill b1-bar" data-w="92"></div>
+                </div>
+              </div>
+              <div class="bv-bar-row">
+                <div class="bv-bar-label"><span>Tiempo en reportes reducido</span><span>–75%</span></div>
+                <div class="bv-bar-track">
+                  <div class="bv-bar-fill blue b1-bar" data-w="25"></div>
+                </div>
+              </div>
+              <div class="bv-bar-row">
+                <div class="bv-bar-label"><span>Tiempo atención tickets</span><span>–68%</span></div>
+                <div class="bv-bar-track">
+                  <div class="bv-bar-fill green b1-bar" data-w="32"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scene 02 -->
+    <div class="benefit-scene" data-scene="2">
+      <div class="benefit-sticky">
+        <div class="benefit-bg benefit-bg-2" id="bbg2"></div>
+        <div class="benefit-card-wrap" id="bcard2">
+          <canvas class="benefit-dither-canvas" id="bdither2"></canvas>
+          <div class="benefit-collapsed" id="bcollapsed2">
+            <div class="benefit-collapsed-num">02</div>
+            <div class="benefit-collapsed-title">Equipos híbridos escalan sin aumentar nómina</div>
+
+          </div>
+          <div class="benefit-expanded" id="bexpanded2">
+            <div class="benefit-exp-left">
+              <div class="benefit-exp-num">02</div>
+              <div class="benefit-exp-title">Equipos híbridos que escalan sin aumentar nómina</div>
+              <div class="benefit-exp-desc">Cada colaborador trabaja respaldado por agentes de IA especializados que
+                ejecutan tareas de soporte, seguimiento y análisis.</div>
+              <span class="benefit-exp-pill">3× capacidad operativa</span>
+            </div>
+            <div class="benefit-exp-right">
+              <p
+                style="font-size:11px;color:rgba(255,255,255,0.3);text-transform:uppercase;letter-spacing:0.08em;font-weight:600;margin-bottom:12px">
+                Composición del equipo</p>
+              <div class="bv-team-row">
+                <div class="bv-person human">👤</div>
+                <div class="bv-person human">👤</div>
+                <div class="bv-person human">👤</div>
+                <div class="bv-team-label">3 personas</div>
+              </div>
+              <div class="bv-team-row" style="margin-top:10px">
+                <div class="bv-person ai">🤖</div>
+                <div class="bv-person ai">🤖</div>
+                <div class="bv-person ai">🤖</div>
+                <div class="bv-person ai">🤖</div>
+                <div class="bv-person ai">🤖</div>
+                <div class="bv-team-label">5 agentes IA</div>
+              </div>
+              <div class="bv-capacity">
+                <div>
+                  <div class="bv-capacity-label">Capacidad total</div>
+                  <div class="bv-capacity-val">3× sin contratar</div>
+                </div><span style="font-size:24px">🚀</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scene 03 -->
+    <div class="benefit-scene" data-scene="3">
+      <div class="benefit-sticky" style="margin-bottom:100px">
+        <div class="benefit-bg benefit-bg-3" id="bbg3"></div>
+        <div class="benefit-card-wrap" id="bcard3">
+          <canvas class="benefit-dither-canvas" id="bdither3"></canvas>
+          <div class="benefit-collapsed" id="bcollapsed3">
+            <div class="benefit-collapsed-num">03</div>
+            <div class="benefit-collapsed-title">Implementación en 4 semanas, no en 6 meses</div>
+
+          </div>
+          <div class="benefit-expanded" id="bexpanded3">
+            <div class="benefit-exp-left">
+              <div class="benefit-exp-num">03</div>
+              <div class="benefit-exp-title">Implementación en 4 semanas, no en 6 meses</div>
+              <div class="benefit-exp-desc">Nuestro proceso de onboarding lleva a tu equipo desde cero al primer
+                resultado en un mes. Sin meses de consultoría previa.</div>
+              <span class="benefit-exp-pill">4 semanas al primer resultado</span>
+            </div>
+            <div class="benefit-exp-right">
+              <div class="bv-tl-step">
+                <div class="bv-tl-check"><svg viewBox="0 0 13 10" fill="none">
+                    <path d="M1 5l4 4 7-8" stroke="white" stroke-width="2" stroke-linecap="round"
+                      stroke-linejoin="round" />
+                  </svg></div>
+                <div>
+                  <div class="bv-tl-text">Diagnóstico y mapeo de procesos</div>
+                  <div class="bv-tl-week">Semana 1</div>
+                </div>
+              </div>
+              <div class="bv-tl-line"></div>
+              <div class="bv-tl-step">
+                <div class="bv-tl-check"><svg viewBox="0 0 13 10" fill="none">
+                    <path d="M1 5l4 4 7-8" stroke="white" stroke-width="2" stroke-linecap="round"
+                      stroke-linejoin="round" />
+                  </svg></div>
+                <div>
+                  <div class="bv-tl-text">Configuración y entrenamiento de agentes</div>
+                  <div class="bv-tl-week">Semana 2</div>
+                </div>
+              </div>
+              <div class="bv-tl-line"></div>
+              <div class="bv-tl-step">
+                <div class="bv-tl-check"><svg viewBox="0 0 13 10" fill="none">
+                    <path d="M1 5l4 4 7-8" stroke="white" stroke-width="2" stroke-linecap="round"
+                      stroke-linejoin="round" />
+                  </svg></div>
+                <div>
+                  <div class="bv-tl-text">Integración con sistemas actuales</div>
+                  <div class="bv-tl-week">Semana 3</div>
+                </div>
+              </div>
+              <div class="bv-tl-line"></div>
+              <div class="bv-tl-step">
+                <div class="bv-tl-check"><svg viewBox="0 0 13 10" fill="none">
+                    <path d="M1 5l4 4 7-8" stroke="white" stroke-width="2" stroke-linecap="round"
+                      stroke-linejoin="round" />
+                  </svg></div>
+                <div>
+                  <div class="bv-tl-text">Go-live y primeros resultados medibles</div>
+                  <div class="bv-tl-week">Semana 4 ✦ Primer resultado</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- CASOS -->
+  <section id="casos">
+    <div class="container">
+      <div class="section-header fade-up">
+        <span class="label">Casos de Éxito</span>
+        <h2>Resultados reales en industrias reales.</h2>
+      </div>
+    </div>
+
+    <!-- Circular Gallery -->
+    <div class="cgal-scroll">
+      <div class="cgal-sticky">
+        <div class="cgal-bg"></div>
+        <div class="cgal-bg-glow"></div>
+
+        <div class="cgal-stage">
+          <div class="cgal-rotor" id="cgalRotor">
+
+            <!-- Card 0: Seguros -->
+            <div class="cgal-card" data-angle="0">
+              <div class="cgal-card-inner cgal-bg-0">
+                <svg class="cgal-pattern" viewBox="0 0 300 400" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="200" cy="100" r="120" fill="white" opacity="0.08" />
+                  <circle cx="50" cy="300" r="80" fill="white" opacity="0.06" />
+                </svg>
+                <div class="cgal-card-content">
+                  <div class="cgal-industry-tag">Seguros</div>
+                  <div class="cgal-card-title">Automatización de cotizaciones y reclamaciones</div>
+                  <div class="cgal-metrics">
+                    <div class="cgal-metric">–96% tiempo de respuesta</div>
+                    <div class="cgal-metric">3× atención simultánea</div>
+                    <div class="cgal-metric">NPS +42 puntos</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card 1: Educación -->
+            <div class="cgal-card" data-angle="51">
+              <div class="cgal-card-inner cgal-bg-1">
+                <svg class="cgal-pattern" viewBox="0 0 300 400" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="160" y="20" width="180" height="180" rx="24" fill="white" opacity="0.08"
+                    transform="rotate(30 200 80)" />
+                  <rect x="20" y="220" width="120" height="120" rx="16" fill="white" opacity="0.06" />
+                </svg>
+                <div class="cgal-card-content">
+                  <div class="cgal-industry-tag">Educación</div>
+                  <div class="cgal-card-title">Seguimiento automatizado de 5.000 estudiantes</div>
+                  <div class="cgal-metrics">
+                    <div class="cgal-metric">80% tareas automatizadas</div>
+                    <div class="cgal-metric">0 leads sin seguimiento</div>
+                    <div class="cgal-metric">–60% carga administrativa</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card 2: Logística -->
+            <div class="cgal-card" data-angle="102">
+              <div class="cgal-card-inner cgal-bg-2">
+                <svg class="cgal-pattern" viewBox="0 0 300 400" xmlns="http://www.w3.org/2000/svg">
+                  <polygon points="150,20 280,300 20,300" fill="white" opacity="0.07" />
+                  <circle cx="240" cy="320" r="60" fill="white" opacity="0.05" />
+                </svg>
+                <div class="cgal-card-content">
+                  <div class="cgal-industry-tag">Logística</div>
+                  <div class="cgal-card-title">Control operativo y seguimiento en tiempo real</div>
+                  <div class="cgal-metrics">
+                    <div class="cgal-metric">99.2% operaciones monitoreadas</div>
+                    <div class="cgal-metric">–45% errores operativos</div>
+                    <div class="cgal-metric">+38% satisfacción cliente</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card 3: Salud -->
+            <div class="cgal-card" data-angle="153">
+              <div class="cgal-card-inner cgal-bg-3">
+                <svg class="cgal-pattern" viewBox="0 0 300 400" xmlns="http://www.w3.org/2000/svg">
+                  <ellipse cx="250" cy="150" rx="100" ry="140" fill="white" opacity="0.08" />
+                  <circle cx="60" cy="340" r="70" fill="white" opacity="0.05" />
+                </svg>
+                <div class="cgal-card-content">
+                  <div class="cgal-industry-tag">Salud</div>
+                  <div class="cgal-card-title">Gestión inteligente de citas y PQRS médicas</div>
+                  <div class="cgal-metrics">
+                    <div class="cgal-metric">–85% tiempo respuesta PQRS</div>
+                    <div class="cgal-metric">2× capacidad de atención</div>
+                    <div class="cgal-metric">+55% satisfacción paciente</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card 4: Finanzas -->
+            <div class="cgal-card" data-angle="204">
+              <div class="cgal-card-inner cgal-bg-4">
+                <svg class="cgal-pattern" viewBox="0 0 300 400" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="80" y="30" width="200" height="200" rx="100" fill="white" opacity="0.07" />
+                  <rect x="20" y="260" width="140" height="100" rx="16" fill="white" opacity="0.05" />
+                </svg>
+                <div class="cgal-card-content">
+                  <div class="cgal-industry-tag">Finanzas</div>
+                  <div class="cgal-card-title">Automatización de procesos de crédito y cobranza</div>
+                  <div class="cgal-metrics">
+                    <div class="cgal-metric">–78% tiempo aprobación créditos</div>
+                    <div class="cgal-metric">+32% recuperación cartera</div>
+                    <div class="cgal-metric">0 errores en conciliación</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card 5: Retail -->
+            <div class="cgal-card" data-angle="255">
+              <div class="cgal-card-inner cgal-bg-5">
+                <svg class="cgal-pattern" viewBox="0 0 300 400" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="80" cy="80" r="90" fill="white" opacity="0.07" />
+                  <circle cx="240" cy="300" r="110" fill="white" opacity="0.05" />
+                </svg>
+                <div class="cgal-card-content">
+                  <div class="cgal-industry-tag">Retail</div>
+                  <div class="cgal-card-title">Servicio al cliente omnicanal con agentes IA</div>
+                  <div class="cgal-metrics">
+                    <div class="cgal-metric">–72% tickets escalados</div>
+                    <div class="cgal-metric">4× velocidad resolución</div>
+                    <div class="cgal-metric">NPS +38 en 60 días</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card 6: Construcción -->
+            <div class="cgal-card" data-angle="306">
+              <div class="cgal-card-inner cgal-bg-6">
+                <svg class="cgal-pattern" viewBox="0 0 300 400" xmlns="http://www.w3.org/2000/svg">
+                  <polygon points="150,10 290,380 10,380" fill="white" opacity="0.06" />
+                  <circle cx="220" cy="80" r="50" fill="white" opacity="0.08" />
+                </svg>
+                <div class="cgal-card-content">
+                  <div class="cgal-industry-tag">Construcción</div>
+                  <div class="cgal-card-title">Gestión documental y flujos de aprobación IA</div>
+                  <div class="cgal-metrics">
+                    <div class="cgal-metric">–90% tiempo aprobación docs</div>
+                    <div class="cgal-metric">100% trazabilidad proyectos</div>
+                    <div class="cgal-metric">–50% errores documentales</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div><!-- /rotor -->
+        </div><!-- /stage -->
+
+      </div><!-- /sticky -->
+    </div><!-- /scroll -->
+
+  </section>
+
+  <!-- TESTIMONIOS -->
+  <section id="testimonios">
+    <div class="container">
+      <div class="section-header fade-up">
+        <span class="label">Testimonios</span>
+        <h2>Lo que dicen nuestros clientes.</h2>
+        <p>Directivos y equipos que transformaron sus operaciones con Analitia.</p>
+      </div>
+    </div>
+    <div class="toc-wrap fade-up">
+
+      <!-- LEFT: Orbit -->
+      <div class="toc-stage" id="tocStage">
+        <div class="toc-ring"></div>
+        <div class="toc-rotor" id="tocRotor">
+          <!-- avatars injected by JS -->
+        </div>
+        <!-- Center card -->
+        <div class="toc-center-card">
+          <div class="toc-center-avatar" id="tocCenterAvatar"></div>
+          <div class="toc-center-name" id="tocCenterName"></div>
+          <div class="toc-center-role" id="tocCenterRole"></div>
+          <div class="toc-center-company" id="tocCenterCompany"></div>
+          <div class="toc-center-nav">
+            <button class="toc-nav-btn" id="tocPrev">←</button>
+            <button class="toc-connect-btn">Ver caso</button>
+            <button class="toc-nav-btn" id="tocNext">→</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: Quote -->
+      <div class="toc-quote-panel">
+        <div class="toc-quote-mark">"</div>
+        <div class="toc-quote-text" id="tocQuoteText"></div>
+        <div class="toc-quote-author">
+          <div class="toc-quote-name" id="tocQuoteAuthor"></div>
+          <div class="toc-quote-info" id="tocQuoteInfo"></div>
+          <div class="toc-quote-industry" id="tocQuoteIndustry"></div>
+          <div class="toc-stars">★★★★★</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- FORM -->
+  <section id="demo">
+    <div class="form-outer">
+      <div class="form-card fade-up">
+        <canvas class="form-canvas" id="ditherCanvas"></canvas>
+        <div class="form-inner">
+
+          <!-- Left: pitch -->
+          <div class="form-left">
+            <span class="pill">Solicitar Demo</span>
+            <h2>¿Listo para ver <span>Analitia</span> en acción?</h2>
+            <p>Agenda una demo personalizada y te mostramos cómo funciona con tu industria y procesos específicos. Sin
+              compromisos.</p>
+            <div class="form-trust">
+              <div class="form-trust-item">
+                <div class="form-trust-icon">✓</div>
+                Demo gratuita de 45 minutos
+              </div>
+              <div class="form-trust-item">
+                <div class="form-trust-icon">✓</div>
+                Personalizada para tu industria
+              </div>
+              <div class="form-trust-item">
+                <div class="form-trust-icon">✓</div>
+                Respuesta en menos de 24 horas
+              </div>
+              <div class="form-trust-item">
+                <div class="form-trust-icon">✓</div>
+                Sin tarjeta de crédito requerida
+              </div>
+            </div>
+          </div>
+
+          <!-- Right: form -->
+          <div class="form-right">
+            <form id="demoForm" onsubmit="handleSubmit(event)">
+              <div class="form-grid">
+                <div class="form-group">
+                  <label>Nombre completo</label>
+                  <input type="text" placeholder="Juan Martínez" required>
+                </div>
+                <div class="form-group">
+                  <label>Empresa</label>
+                  <input type="text" placeholder="Mi Empresa S.A.S." required>
+                </div>
+                <div class="form-group">
+                  <label>Cargo</label>
+                  <input type="text" placeholder="Director Comercial" required>
+                </div>
+                <div class="form-group">
+                  <label>Email corporativo</label>
+                  <input type="email" placeholder="juan@miempresa.com" required>
+                </div>
+                <div class="form-group">
+                  <label>País</label>
+                  <select required>
+                    <option value="" disabled selected>Selecciona</option>
+                    <option>Colombia</option>
+                    <option>México</option>
+                    <option>Perú</option>
+                    <option>Chile</option>
+                    <option>Ecuador</option>
+                    <option>Argentina</option>
+                    <option>Otro</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Tamaño de empresa</label>
+                  <select required>
+                    <option value="" disabled selected>Empleados</option>
+                    <option>1–10</option>
+                    <option>11–50</option>
+                    <option>51–200</option>
+                    <option>201–500</option>
+                    <option>500+</option>
+                  </select>
+                </div>
+                <div class="form-group form-full">
+                  <label>¿Qué proceso quieres automatizar?</label>
+                  <textarea placeholder="Cuéntanos tu mayor dolor operativo hoy..."></textarea>
+                </div>
+              </div>
+              <button type="submit" class="btn-submit">Agendar mi Demo Gratuita →</button>
+              <p class="form-disclaimer">Sin compromisos · Respuesta en menos de 24 horas</p>
+            </form>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq">
+    <div class="container">
+      <div class="faq-layout">
+        <div class="faq-left fade-up">
+          <span class="label">Preguntas frecuentes</span>
+          <h2>Resolvemos tus dudas.</h2>
+          <p>Si no encuentras lo que buscas, nuestro equipo está disponible para una conversación sin compromisos.</p>
+          <button class="btn-outline"
+            onclick="document.getElementById('demo').scrollIntoView({behavior:'smooth'})">¿Otra pregunta?
+            Contáctanos</button>
+        </div>
+        <div class="faq-list fade-up">
+          <div class="faq-item">
+            <div class="faq-q">¿Qué hace diferente a Analitia de un CRM tradicional? <span class="faq-icon">+</span>
+            </div>
+            <div class="faq-a">
+              <div class="faq-a-inner">Un CRM tradicional es un registro: almacena información y muestra reportes.
+                Analitia es un sistema que actúa. Nuestros agentes de IA no esperan a que un humano los active —
+                detectan oportunidades, ejecutan seguimientos, responden clientes y alertan sobre riesgos de forma
+                autónoma. La diferencia es que el software trabaja, no solo almacena.</div>
+            </div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q">¿Cuánto tiempo toma implementar la plataforma? <span class="faq-icon">+</span></div>
+            <div class="faq-a">
+              <div class="faq-a-inner">Nuestro proceso estándar es de 4 semanas: diagnóstico y mapeo, configuración,
+                integración con tus sistemas y go-live con acompañamiento. El primer resultado medible siempre llega en
+                el mes uno.</div>
+            </div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q">¿Los agentes de IA se adaptan a mi industria? <span class="faq-icon">+</span></div>
+            <div class="faq-a">
+              <div class="faq-a-inner">Sí. Cada agente se entrena con el vocabulario, procesos y reglas de tu industria
+                específica. No usamos un agente genérico: lo construimos para que entienda el ciclo comercial de
+                seguros, logística, salud o educación según sea tu caso.</div>
+            </div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q">¿Qué tan segura es la plataforma? <span class="faq-icon">+</span></div>
+            <div class="faq-a">
+              <div class="faq-a-inner">Analitia opera bajo estándares empresariales: cifrado AES-256 en tránsito y en
+                reposo, autenticación multifactor, control de acceso por roles, auditoría de acciones y SLA de 99.9% de
+                disponibilidad para clientes enterprise.</div>
+            </div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q">¿Cuál es el modelo de precios? <span class="faq-icon">+</span></div>
+            <div class="faq-a">
+              <div class="faq-a-inner">Trabajamos con precios por módulo y número de usuarios, adaptados a cada empresa.
+                Cada implementación incluye configuración de agentes específica. Agenda una demo y te presentamos una
+                propuesta personalizada.</div>
+            </div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q">¿Necesito conocimientos técnicos para usarla? <span class="faq-icon">+</span></div>
+            <div class="faq-a">
+              <div class="faq-a-inner">No. Analitia está diseñado para equipos comerciales, de servicio y operaciones.
+                La interfaz es intuitiva y la implementación incluye capacitación completa. Nuestros clientes más
+                exitosos son directores comerciales sin equipo técnico dedicado.</div>
+            </div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q">¿Analitia se integra con mis sistemas actuales? <span class="faq-icon">+</span></div>
+            <div class="faq-a">
+              <div class="faq-a-inner">Sí. Tenemos integraciones nativas con WhatsApp Business, Gmail y Outlook,
+                sistemas de facturación electrónica, ERPs como SAP y Siesa, plataformas de e-commerce y más. También
+                ofrecemos API abierta para integraciones personalizadas.</div>
+            </div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q">¿Pueden crear un agente para mi proceso específico? <span class="faq-icon">+</span></div>
+            <div class="faq-a">
+              <div class="faq-a-inner">Absolutamente. Si tienes un proceso que requiere 5 personas para ejecutarse,
+                podemos diseñar un agente que lo ejecute autónomamente. Cuéntanos en la demo y lo evaluamos sin
+                compromiso.</div>
+            </div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q">¿En qué países está disponible? <span class="faq-icon">+</span></div>
+            <div class="faq-a">
+              <div class="faq-a-inner">Operamos con clientes activos en Colombia, México, Perú y Chile. Estamos en
+                expansión hacia Ecuador, Argentina y el mercado hispano de Estados Unidos en 2025.</div>
+            </div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q">¿Puedo ver una demo antes de decidir? <span class="faq-icon">+</span></div>
+            <div class="faq-a">
+              <div class="faq-a-inner">Por supuesto. La demo es gratuita, dura 45 minutos y es personalizada para tu
+                industria. No tienes ningún compromiso de compra al agendarla.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BLOG -->
+  <section id="blog">
+    <div class="container">
+      <div class="section-header fade-up">
+        <span class="label">Blog</span>
+        <h2>Recursos sobre IA empresarial y automatización.</h2>
+        <p>Perspectivas y guías prácticas del equipo de Analitia.</p>
+      </div>
+      <div class="blog-featured fade-up">
+        <div class="blog-img-main"></div>
+        <div class="blog-featured-content">
+          <span class="pill">Automatización</span>
+          <h3>Cómo los agentes de IA están redefiniendo los equipos comerciales en 2025</h3>
+          <p>El rol del vendedor está cambiando. No porque la IA lo reemplace, sino porque ahora trabaja con un equipo
+            de agentes que hacen todo lo que antes consumía su tiempo.</p>
+          <p class="blog-meta">Por Equipo Analitia · 12 de junio, 2025 · 8 min de lectura</p>
+          <a href="#" class="blog-link">Leer artículo →</a>
+        </div>
+      </div>
+      <div class="blog-grid">
+        <div class="blog-card fade-up stagger-1">
+          <div class="blog-card-img grad1"></div>
+          <div class="blog-card-content"><span class="pill-grey pill" style="font-size:11px">CRM</span>
+            <h3>Del CRM como archivo al CRM como motor de acción</h3>
+            <p>La mayoría de las empresas usan su CRM como una base de datos glorificada. Te explicamos cómo convertirlo
+              en el motor real de tus ventas.</p><a href="#" class="blog-link"
+              style="margin-top:12px;display:inline-flex">Leer →</a>
+          </div>
+        </div>
+        <div class="blog-card fade-up stagger-2">
+          <div class="blog-card-img grad2"></div>
+          <div class="blog-card-content"><span class="pill-grey pill" style="font-size:11px">Agentes IA</span>
+            <h3>4 señales de que tu empresa necesita agentes de IA ahora</h3>
+            <p>¿Tu equipo pasa más tiempo actualizando sistemas que hablando con clientes? Estas son las señales claras.
+            </p><a href="#" class="blog-link" style="margin-top:12px;display:inline-flex">Leer →</a>
+          </div>
+        </div>
+        <div class="blog-card fade-up stagger-3">
+          <div class="blog-card-img grad3"></div>
+          <div class="blog-card-content"><span class="pill-grey pill" style="font-size:11px">Analítica</span>
+            <h3>Analítica predictiva: cómo anticipar el abandono de clientes</h3>
+            <p>Los modelos predictivos identifican clientes en riesgo semanas antes de que cancelen. Así funciona en la
+              práctica.</p><a href="#" class="blog-link" style="margin-top:12px;display:inline-flex">Leer →</a>
+          </div>
+        </div>
+      </div>
+      <div class="blog-cta-wrap fade-up"><button class="btn-outline">Ver todos los artículos</button></div>
+    </div>
+  </section>
+
+  <!-- PRE-FOOTER -->
+  <div class="pre-footer fade-up">
+    <div class="container">
+      <h2>¿Empezamos?</h2>
+      <p>Agenda tu demo y descubre cómo Analitia puede transformar tus operaciones en menos de 4 semanas.</p>
+      <button class="btn-primary"
+        onclick="document.getElementById('demo').scrollIntoView({behavior:'smooth'})">Solicitar Demo Gratuita →</button>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="footer-logo">Analitia<span class="dot"></span></div>
+          <p class="footer-tagline">La plataforma de IA empresarial que construye equipos híbridos donde humanos e
+            inteligencia artificial trabajan juntos.</p>
+          <div class="footer-socials">
+            <a href="#" class="social-btn" aria-label="LinkedIn">in</a>
+            <a href="#" class="social-btn" aria-label="X">𝕏</a>
+            <a href="#" class="social-btn" aria-label="YouTube">▶</a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h4>Plataforma</h4>
+          <ul>
+            <li><a href="#servicios">CRM Inteligente</a></li>
+            <li><a href="#servicios">Agentes Comerciales</a></li>
+            <li><a href="#servicios">Servicio 24/7</a></li>
+            <li><a href="#servicios">Analítica Predictiva</a></li>
+            <li><a href="#servicios">Gestión Documental</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Empresa</h4>
+          <ul>
+            <li><a href="#nosotros">Nosotros</a></li>
+            <li><a href="#blog">Blog</a></li>
+            <li><a href="#casos">Casos de Éxito</a></li>
+            <li><a href="#">Trabaja con nosotros</a></li>
+            <li><a href="#">Partnerships</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Contacto</h4>
+          <ul>
+            <li><a href="mailto:hola@analitia.co">hola@analitia.co</a></li>
+            <li><a href="#">Colombia · México · Perú · Chile</a></li>
+            <li><a href="#demo">Solicitar Demo</a></li>
+            <li><a href="#">Soporte técnico</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2025 Analitia CRM · Todos los derechos reservados</p>
+        <div class="footer-legal"><a href="#">Política de privacidad</a><a href="#">Términos de uso</a></div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => { navbar.classList.toggle('scrolled', window.scrollY > 20); });
+
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobileMenu');
+    const mobileClose = document.getElementById('mobileClose');
+    hamburger.addEventListener('click', () => mobileMenu.classList.add('open'));
+    mobileClose.addEventListener('click', () => mobileMenu.classList.remove('open'));
+    document.querySelectorAll('.mobile-link').forEach(a => a.addEventListener('click', () => mobileMenu.classList.remove('open')));
+
+    /* Typing */
+    const words = ['Actúa.', 'Aprende.', 'Actúa.'];
+    const typedEl = document.getElementById('typedText');
+    let wi = 0, ci = 0, deleting = false;
+    function typeLoop() {
+      const word = words[wi];
+      typedEl.textContent = deleting ? word.slice(0, ci--) : word.slice(0, ++ci);
+      let delay = deleting ? 60 : ci <= word.length ? 100 : 1800;
+      if (!deleting && ci === word.length) { deleting = true; delay = 1800; }
+      else if (deleting && ci === 0) { deleting = false; wi = (wi + 1) % words.length; }
+      setTimeout(typeLoop, delay);
+    }
+    setTimeout(typeLoop, 1000);
+
+    /* Particles */
+    const pCont = document.getElementById('heroParticles');
+    function spawnP() {
+      const p = document.createElement('div'); p.className = 'hero-particle';
+      const s = Math.random() * 3 + 1.5;
+      p.style.cssText = `width:${s}px;height:${s}px;left:${Math.random() * 100}%;bottom:${Math.random() * 30}%;animation-duration:${Math.random() * 6 + 4}s;animation-delay:${Math.random() * 2}s;`;
+      pCont.appendChild(p); setTimeout(() => p.remove(), 12000);
+    }
+    for (let i = 0; i < 28; i++)spawnP();
+    setInterval(spawnP, 500);
+
+    /* countUp util */
+    function countUp(el, target, suffix, dur) {
+      if (!el) return;
+      const s = performance.now();
+      (function step(n) {
+        const p = Math.min((n - s) / dur, 1), e = 1 - Math.pow(1 - p, 3);
+        el.textContent = Math.floor(e * target) + (suffix || '');
+        if (p < 1) requestAnimationFrame(step);
+      })(performance.now());
+    }
+
+    /* Hero counters on load */
+    setTimeout(() => {
+      countUp(document.getElementById('m-clients'), 15, '', 1400);
+      countUp(document.getElementById('m-years'), 3, '', 1400);
+    }, 800);
+
+    /* Scroll fade-up */
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          obs.unobserve(entry.target);
+          entry.target.querySelectorAll('[data-target]').forEach(el => {
+            const t = parseInt(el.dataset.target);
+            countUp(el, t, '', 1200);
+          });
+          entry.target.querySelectorAll('.bar-fill.animatable').forEach(bar => {
+            bar.style.width = bar.dataset.width + '%';
+          });
+        }
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.fade-up').forEach(el => obs.observe(el));
+
+    /* Nosotros stat counters */
+    new IntersectionObserver(e => {
+      if (e[0].isIntersecting) {
+        e[0].target.querySelectorAll('.stat-num[data-target]').forEach(el => countUp(el, parseInt(el.dataset.target), '', 1200));
+      }
+    }, { threshold: 0.3 }).observe(document.getElementById('nosotros'));
+
+    /* FAQ */
+    document.querySelectorAll('.faq-item').forEach(item => {
+      item.querySelector('.faq-q').addEventListener('click', () => {
+        const isOpen = item.classList.contains('open');
+        document.querySelectorAll('.faq-item.open').forEach(o => { o.classList.remove('open'); o.querySelector('.faq-a').style.maxHeight = null; });
+        if (!isOpen) { item.classList.add('open'); item.querySelector('.faq-a').style.maxHeight = item.querySelector('.faq-a').scrollHeight + 'px'; }
+      });
+    });
+
+    /* ── CIRCULAR GALLERY — CASOS ── */
+    (function () {
+      const rotor = document.getElementById('cgalRotor');
+      const cards = rotor ? Array.from(rotor.querySelectorAll('.cgal-card')) : [];
+      if (!cards.length) return;
+
+      const RADIUS = 580;
+      const N = cards.length;
+      let rotation = 0;
+      const AUTO_SPEED = 0.12; // deg per frame — faster rotation
+
+      // Position cards in 3D circle
+      cards.forEach((card, i) => {
+        const angle = (360 / N) * i;
+        card.style.transform = `rotateY(${angle}deg) translateZ(${RADIUS}px)`;
+      });
+
+      function updateOpacity() {
+        cards.forEach((card, i) => {
+          const itemAngle = (360 / N) * i;
+          const rel = ((itemAngle + rotation) % 360 + 360) % 360;
+          const norm = rel > 180 ? 360 - rel : rel;
+          card.style.opacity = Math.max(0.25, 1 - norm / 180);
+        });
+      }
+
+      function tick() {
+        rotation += AUTO_SPEED;
+        if (rotor) rotor.style.transform = `rotateY(${rotation}deg)`;
+        updateOpacity();
+        requestAnimationFrame(tick);
+      }
+
+      requestAnimationFrame(tick);
+    })();
+
+    /* ── DITHERING CANVAS EFFECT (shared) ── */
+    function initDitherCanvas(canvas, getHovered) {
+      if (!canvas) return;
+      const gl = canvas.getContext('webgl', { alpha: true, premultipliedAlpha: false });
+      if (!gl) { canvas.style.display = 'none'; return; }
+
+      const vert = `attribute vec2 a_pos; void main(){ gl_Position=vec4(a_pos,0.,1.); }`;
+      const frag = `
+    precision mediump float;
+    uniform vec2  u_res;
+    uniform float u_time;
+    uniform float u_speed;
+    float bayer4(vec2 p){
+      int x=int(mod(p.x,4.0)); int y=int(mod(p.y,4.0));
+      float v=0.0;
+      if(x==0&&y==0)v=0.;   else if(x==1&&y==0)v=8.;
+      else if(x==2&&y==0)v=2.;  else if(x==3&&y==0)v=10.;
+      else if(x==0&&y==1)v=12.; else if(x==1&&y==1)v=4.;
+      else if(x==2&&y==1)v=14.; else if(x==3&&y==1)v=6.;
+      else if(x==0&&y==2)v=3.;  else if(x==1&&y==2)v=11.;
+      else if(x==2&&y==2)v=1.;  else if(x==3&&y==2)v=9.;
+      else if(x==0&&y==3)v=15.; else if(x==1&&y==3)v=7.;
+      else if(x==2&&y==3)v=13.; else v=5.;
+      return v/16.0;
+    }
+    void main(){
+      vec2 uv=gl_FragCoord.xy/u_res;
+      float t=u_time*u_speed;
+      float nx=sin(uv.x*3.1+t*0.7)*cos(uv.y*2.4+t*0.5)*0.5+0.5;
+      float ny=cos(uv.x*2.7-t*0.6)*sin(uv.y*3.3+t*0.8)*0.5+0.5;
+      float n=(nx+ny)*0.5;
+      n=n*n*0.9+0.05;
+      float d=step(bayer4(gl_FragCoord.xy),n);
+      gl_FragColor=vec4(1.0,0.42,0.10,d*0.85);
+    }
+  `;
+
+      function mkShader(type, src) {
+        const s = gl.createShader(type);
+        gl.shaderSource(s, src); gl.compileShader(s);
+        if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) { console.warn(gl.getShaderInfoLog(s)); return null; }
+        return s;
+      }
+      const vs = mkShader(gl.VERTEX_SHADER, vert);
+      const fs = mkShader(gl.FRAGMENT_SHADER, frag);
+      if (!vs || !fs) { canvas.style.display = 'none'; return; }
+      const prog = gl.createProgram();
+      gl.attachShader(prog, vs); gl.attachShader(prog, fs); gl.linkProgram(prog);
+      if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) { canvas.style.display = 'none'; return; }
+      gl.useProgram(prog);
+
+      const buf = gl.createBuffer();
+      gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
+      const loc = gl.getAttribLocation(prog, 'a_pos');
+      gl.enableVertexAttribArray(loc);
+      gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+
+      const uRes = gl.getUniformLocation(prog, 'u_res');
+      const uTime = gl.getUniformLocation(prog, 'u_time');
+      const uSpeed = gl.getUniformLocation(prog, 'u_speed');
+      gl.enable(gl.BLEND);
+      gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+
+      function resize() {
+        canvas.width = canvas.offsetWidth || 800;
+        canvas.height = canvas.offsetHeight || 400;
+        gl.viewport(0, 0, canvas.width, canvas.height);
+      }
+      resize();
+      new ResizeObserver(resize).observe(canvas);
+
+      let start = null;
+      function frame(ts) {
+        if (!start) start = ts;
+        gl.uniform2f(uRes, canvas.width, canvas.height);
+        gl.uniform1f(uTime, (ts - start) * 0.001);
+        gl.uniform1f(uSpeed, getHovered() ? 0.55 : 0.18);
+        gl.clear(gl.COLOR_BUFFER_BIT);
+        gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+        requestAnimationFrame(frame);
+      }
+      requestAnimationFrame(frame);
+    }
+
+    /* Init form canvas */
+    (function () {
+      const canvas = document.getElementById('ditherCanvas');
+      const card = document.querySelector('.form-card');
+      let hovered = false;
+      if (card) {
+        card.addEventListener('mouseenter', () => hovered = true);
+        card.addEventListener('mouseleave', () => hovered = false);
+      }
+      initDitherCanvas(canvas, () => hovered);
+    })();
+
+    /* Init benefit canvases */
+    ['bdither1', 'bdither2', 'bdither3'].forEach(function (id, i) {
+      const canvas = document.getElementById(id);
+      const card = document.getElementById('bcard' + (i + 1));
+      let hovered = false;
+      if (card) {
+        card.addEventListener('mouseenter', () => hovered = true);
+        card.addEventListener('mouseleave', () => hovered = false);
+      }
+      initDitherCanvas(canvas, () => hovered);
+    });
+
+    /* ── BENEFIT SCROLL EXPAND ── */
+    (function () {
+      const SCENES = [
+        { scene: document.querySelector('[data-scene="1"]'), bg: document.getElementById('bbg1'), card: document.getElementById('bcard1'), collapsed: document.getElementById('bcollapsed1'), expanded: document.getElementById('bexpanded1'), barsClass: 'b1-bar', barsDone: false },
+        { scene: document.querySelector('[data-scene="2"]'), bg: document.getElementById('bbg2'), card: document.getElementById('bcard2'), collapsed: document.getElementById('bcollapsed2'), expanded: document.getElementById('bexpanded2') },
+        { scene: document.querySelector('[data-scene="3"]'), bg: document.getElementById('bbg3'), card: document.getElementById('bcard3'), collapsed: document.getElementById('bcollapsed3'), expanded: document.getElementById('bexpanded3') },
+      ];
+      const BASE_W = 480, BASE_H = 260, MAX_W_VW = 0.88, MAX_H_VH = 0.82;
+      function easeOut(t) { return 1 - Math.pow(1 - t, 3); }
+      function updateScene(s) {
+        if (!s.scene || !s.card) return;
+        const rect = s.scene.getBoundingClientRect();
+        const total = s.scene.offsetHeight - window.innerHeight;
+        const raw = Math.max(0, Math.min(1, -rect.top / total));
+        const p = easeOut(raw);
+        const w = BASE_W + (window.innerWidth * MAX_W_VW - BASE_W) * p;
+        const h = BASE_H + (window.innerHeight * MAX_H_VH - BASE_H) * p;
+        s.card.style.width = w + 'px'; s.card.style.height = h + 'px';
+        s.bg.style.opacity = Math.min(p * 1.8, 1);
+        const show = raw > 0.55;
+        s.collapsed.style.opacity = Math.max(0, 1 - raw * 4);
+        s.expanded.classList.toggle('visible', show);
+        if (show && s.barsClass && !s.barsDone) {
+          s.barsDone = true;
+          document.querySelectorAll('.' + s.barsClass).forEach(b => { b.style.width = (b.dataset.w || 0) + '%'; });
+        }
+      }
+      SCENES.forEach(s => { if (s.card) { s.card.style.width = BASE_W + 'px'; s.card.style.height = BASE_H + 'px'; } });
+      window.addEventListener('scroll', () => SCENES.forEach(updateScene), { passive: true });
+      SCENES.forEach(updateScene);
+    })();
+
+    /* ── SERVICIOS FEATURE CAROUSEL ── */
+    (function () {
+      const N = 7, ITEM_H = 68;
+      let current = 0, timer = null;
+      const AUTO_MS = 1200;
+      const items = Array.from({ length: N }, (_, i) => document.getElementById('sfc-item-' + i));
+      const chips = items.map(el => el && el.querySelector('.sfc-chip'));
+      const panels = Array.from({ length: N }, (_, i) => document.getElementById('sfc-panel-' + i));
+      const counter = document.getElementById('sfcCounter');
+
+      function render(idx, isFast = false) {
+        const speed = isFast ? '0.08s' : '0.2s';
+        items.forEach((item, i) => {
+          if (!item) return;
+          const diff = i - idx;
+          item.style.transform = `translateY(${diff * ITEM_H}px)`;
+          item.style.opacity = Math.max(0.25, 1 - Math.abs(diff) * 0.22);
+          item.style.transition = `transform ${speed} cubic-bezier(0.34,1.1,0.64,1),opacity 0.2s ease`;
+        });
+        chips.forEach((chip, i) => { if (chip) chip.classList.toggle('active', i === idx); });
+        panels.forEach((panel, i) => { if (panel) panel.classList.toggle('active', i === idx); });
+        if (counter) counter.textContent = (idx + 1) + ' / ' + N;
+      }
+
+      window.sfcGo = function (idx) { 
+        const isFast = Math.abs(current - idx) > 1;
+        current = idx; render(idx, isFast); restart(); 
+      };
+      function next() { 
+        const isFast = current === N - 1;
+        current = (current + 1) % N; render(current, isFast); 
+      }
+      function restart() { clearInterval(timer); timer = setInterval(next, AUTO_MS); }
+
+      const card = document.querySelector('.sfc-card');
+      if (card) {
+        card.addEventListener('mouseenter', () => clearInterval(timer));
+        card.addEventListener('mouseleave', () => restart());
+      }
+      render(0); restart();
+    })();
+    /* ── TESTIMONIOS ORBIT CAROUSEL ── */
+    (function () {
+      const PEOPLE = [
+        {
+          name: 'Carlos Mendoza', role: 'Director Comercial', company: 'Seguros del Valle', industry: 'Seguros',
+          image: 'https://randomuser.me/api/portraits/men/32.jpg',
+          quote: 'Analitia redujo en un 96% el tiempo de respuesta a nuestros clientes. Nuestro equipo ahora se enfoca en cerrar ventas, no en gestionar tickets.'
+        },
+        {
+          name: 'Valentina Ríos', role: 'Rectora Académica', company: 'Universidad Central', industry: 'Educación',
+          image: 'https://randomuser.me/api/portraits/women/44.jpg',
+          quote: 'Automatizamos el seguimiento de 5.000 estudiantes sin contratar una persona más. El índice de deserción bajó un 28% en el primer semestre.'
+        },
+        {
+          name: 'Jorge Castillo', role: 'Gerente de Operaciones', company: 'LogiExpress Colombia', industry: 'Logística',
+          image: 'https://randomuser.me/api/portraits/men/46.jpg',
+          quote: 'Tenemos visibilidad de todas nuestras rutas en tiempo real. Los errores operativos cayeron un 45% y la satisfacción del cliente subió al 97%.'
+        },
+        {
+          name: 'María López', role: 'VP de Tecnología', company: 'Banco Horizonte', industry: 'Finanzas',
+          image: 'https://randomuser.me/api/portraits/women/68.jpg',
+          quote: 'La plataforma se integró con nuestro core bancario en 3 semanas. Nunca creí que una implementación pudiera ser tan rápida y sin fricciones.'
+        },
+        {
+          name: 'Andrés Vargas', role: 'CEO', company: 'MedSalud SAS', industry: 'Salud',
+          image: 'https://randomuser.me/api/portraits/men/22.jpg',
+          quote: 'Las PQRS que antes tardaban 5 días ahora se resuelven en horas. Nuestros pacientes lo notan y el equipo médico puede enfocarse en lo que importa.'
+        },
+        {
+          name: 'Daniela Moreno', role: 'Directora de Retail', company: 'Moda Express', industry: 'Retail',
+          image: 'https://randomuser.me/api/portraits/women/24.jpg',
+          quote: 'El agente de WhatsApp responde 800 consultas diarias sin intervención humana. Las ventas online crecieron 35% en el primer trimestre.'
+        },
+        {
+          name: 'Sebastián Ruiz', role: 'Gerente General', company: 'Constructora Andes', industry: 'Construcción',
+          image: 'https://randomuser.me/api/portraits/men/62.jpg',
+          quote: 'La aprobación de documentos de obra bajó de 5 días a 4 horas. Analitia transformó completamente nuestra cadena de aprobaciones.'
+        },
+        {
+          name: 'Laura Pedraza', role: 'Directora de Experiencia', company: 'TechRetail MX', industry: 'Tecnología',
+          image: 'https://randomuser.me/api/portraits/women/65.jpg',
+          quote: 'Implementamos Analitia en México en exactamente 4 semanas. El ROI fue positivo desde el primer mes de operación.'
+        },
+      ];
+
+      const N = PEOPLE.length, RADIUS = 185;
+      let active = 0, autoTimer = null, isHovering = false;
+      const AUTO_MS = 5000;
+
+      const rotor = document.getElementById('tocRotor');
+      const dotsWrap = document.getElementById('tocDots');
+      const prevBtn = document.getElementById('tocPrev');
+      const nextBtn = document.getElementById('tocNext');
+      const nameEl = document.getElementById('tocCenterName');
+      const roleEl = document.getElementById('tocCenterRole');
+      const compEl = document.getElementById('tocCenterCompany');
+      const avatarEl = document.getElementById('tocCenterAvatar');
+      const quoteEl = document.getElementById('tocQuoteText');
+      const authorEl = document.getElementById('tocQuoteAuthor');
+      const infoEl = document.getElementById('tocQuoteInfo');
+      const indEl = document.getElementById('tocQuoteIndustry');
+      const stage = document.getElementById('tocStage');
+      if (!rotor) return;
+
+      const avatarEls = PEOPLE.map((p, i) => {
+        const wrap = document.createElement('div');
+        wrap.className = 'toc-avatar-wrap';
+        const img = document.createElement('div');
+        img.className = 'toc-avatar-img';
+        img.style.backgroundImage = `url(${p.image})`;
+        img.style.backgroundSize = 'cover';
+        img.style.backgroundPosition = 'center';
+        img.addEventListener('click', () => go(i));
+        wrap.appendChild(img);
+        rotor.appendChild(wrap);
+        return { wrap, img };
+      });
+
+      const dots = PEOPLE.map((_, i) => {
+        const d = document.createElement('button');
+        d.className = 'toc-dot';
+        d.addEventListener('click', () => go(i));
+        if (dotsWrap) dotsWrap.appendChild(d);
+        return d;
+      });
+
+      function render() {
+        const p = PEOPLE[active];
+        avatarEl.style.backgroundImage = `url(${p.image})`;
+        avatarEl.style.backgroundSize = 'cover';
+        avatarEl.style.backgroundPosition = 'center';
+        avatarEl.textContent = '';
+        nameEl.textContent = p.name;
+        roleEl.textContent = p.role;
+        compEl.textContent = p.company;
+        quoteEl.classList.add('fade');
+        setTimeout(() => { quoteEl.textContent = p.quote; quoteEl.classList.remove('fade'); }, 200);
+        authorEl.textContent = p.name;
+        infoEl.textContent = p.role + ' · ' + p.company;
+        indEl.textContent = p.industry;
+        avatarEls.forEach(({ wrap, img }, i) => {
+          const angle = ((i - active) * (360 / N) - 90) * Math.PI / 180;
+          const x = Math.cos(angle) * RADIUS, y = Math.sin(angle) * RADIUS;
+          wrap.style.transition = 'transform 0.55s cubic-bezier(0.34,1.1,0.64,1)';
+          wrap.style.transform = `translate(${x}px,${y}px)`;
+          img.classList.toggle('active', i === active);
+        });
+        dots.forEach((d, i) => d.classList.toggle('on', i === active));
+      }
+
+      function go(idx) { active = ((idx % N) + N) % N; render(); restart(); }
+      if (prevBtn) prevBtn.addEventListener('click', () => go(active - 1));
+      if (nextBtn) nextBtn.addEventListener('click', () => go(active + 1));
+      if (stage) {
+        stage.addEventListener('mouseenter', () => { isHovering = true; clearInterval(autoTimer); });
+        stage.addEventListener('mouseleave', () => { isHovering = false; restart(); });
+      }
+      function restart() { clearInterval(autoTimer); autoTimer = setInterval(() => { if (!isHovering) go(active + 1); }, AUTO_MS); }
+      render(); restart();
+    })();
+
+    function toggleAcc(id) {
+      const item = document.getElementById(id);
+      if (!item) return;
+      const isOpen = item.classList.contains('open');
+      document.querySelectorAll('.acc-item').forEach(function (el) {
+        el.classList.remove('open');
+      });
+      if (!isOpen) item.classList.add('open');
+    }
+    // Remove the broken scrollHeight init — CSS handles open state
+
+    function handleSubmit(e) {
+      e.preventDefault();
+      const btn = e.target.querySelector('.btn-submit');
+      btn.textContent = '¡Solicitud enviada! Te contactamos en 24 hrs.';
+      btn.style.background = '#22C55E'; btn.disabled = true;
+    }
+
+    /* ── HERO DASHBOARD SCROLL TILT ── */
+    (function () {
+      const dashEl = document.getElementById('heroDashboard');
+      const wrapEl = document.querySelector('.hero-dash-wrap');
+      if (!dashEl || !wrapEl) return;
+
+      /* The hero is 180vh. The scroll room is 80vh.
+         Effect completes in the first 60vh of that scroll room. */
+      let RANGE = window.innerHeight * 0.7;
+
+      let dbDone = false;
+      function fireCounters() {
+        if (dbDone) return; dbDone = true;
+        countUp(document.getElementById('db-leads'), 342, '', 1400);
+        countUp(document.getElementById('db-rate'), 67, '%', 1400);
+        countUp(document.getElementById('db-tickets'), 1204, '', 1400);
+        const dp = document.getElementById('db-pipeline');
+        if (dp) { const s = performance.now(); (function step(n) { const p = Math.min((n - s) / 1400, 1), ev = 1 - Math.pow(1 - p, 3); dp.textContent = '$' + (ev * 4.7).toFixed(1) + 'M'; if (p < 1) requestAnimationFrame(step); })(performance.now()); }
+      }
+
+      function update() {
+        // scrollY starts counting once hero top passes viewport top
+        const heroTop = document.getElementById('hero').getBoundingClientRect().top;
+        const scrolled = Math.max(0, -heroTop);  // px scrolled past hero start
+        const p = Math.min(1, scrolled / RANGE);
+        const ease = 1 - Math.pow(1 - p, 3);
+
+        // rotateX: 16° → 0°
+        const rot = 16 * (1 - ease);
+        // scale: 0.88 → 1.0
+        const sc = 0.88 + 0.12 * ease;
+
+        dashEl.style.transform = `perspective(1600px) rotateX(${rot}deg) scale(${sc})`;
+
+        if (p > 0.5) fireCounters();
+      }
+
+      // initial state
+      dashEl.style.transformOrigin = 'center 20%';
+      dashEl.style.transform = 'perspective(1600px) rotateX(16deg) scale(0.88)';
+      window.addEventListener('scroll', update, { passive: true });
+      update();
+
+      // recalc range on resize
+      window.addEventListener('resize', () => { RANGE = window.innerHeight * 0.7; }, { passive: true });
+    })();
+
+  </script>
+</body>
+
+</html>
